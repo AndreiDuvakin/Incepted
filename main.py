@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, render_template
+from data.users import User
 from waitress import serve
 from data import db_session
 
@@ -8,11 +9,11 @@ app.config['SECRET_KEY'] = 'test_secret_key'
 
 @app.route('/')
 def base():
-    return ''
+    return render_template('main.html')
 
 
 def main():
-    db_session.global_init("db/conventus.db")
+    db_session.global_init("db/incepted.db")
     serve(app, host='0.0.0.0', port=5000)
 
 

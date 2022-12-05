@@ -23,8 +23,9 @@ class User(SqlAlchemyBase, UserMixin):
     data_reg = sqlalchemy.Column(sqlalchemy.Date,
                                  default=date.today())
     role = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    activity = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
+    activity = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     birthday = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
+    activated = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)

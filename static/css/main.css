@@ -1,0 +1,33 @@
+.header_block {
+    background-image: url(../images/back_main_one.jpg);
+    ​​​​​​​background-repeat: no-repeat;
+    width: 100%;
+    height: 50%;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.header_title {
+    color: #ffffff;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.486);
+    font: bold;
+    font-size: 3.5vw;
+    transition: font-size 0.5s ease-in, text-shadow 1s ease-in;
+}
+.header_title:hover {
+    font-size: 3.55vw;
+    text-shadow: 0px 0px 20px #ffffff;
+}
+.header_title_2 {
+    color: #ffffff;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.486);
+    font: bold;
+    font-size: 2vw;
+    transition: font-size 0.5s ease-in, text-shadow 1s ease-in;
+}
+.header_title_2:hover {
+    font-size: 2.05vw;
+    text-shadow: 0px 0px 20px #ffffff;
+}

@@ -67,3 +67,15 @@ body {
     height: 100%;
     text-align: center;
 }
+.message_block {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+}
+.message {
+    margin-top: 7px;
+    height: 50px !important;
+    border-radius: 22px !important;
+    width: 50%;
+    text-align: center;
+}

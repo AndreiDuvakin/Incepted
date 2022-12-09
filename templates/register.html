@@ -39,9 +39,11 @@
                 <div class="buttons_from">
                     {{ form.submit(type="submit", class="button") }}
                 </div>
-                {% if message != '' %}
-                <div class="alert alert-danger" role="alert">{{ message }}</div>
-                {% endif %}
+                <div class="message_block">
+                    {% if message != '' %}
+                    <div class="alert alert-danger message" role="alert">{{ message }}</div>
+                    {% endif %}
+                </div>
             </form>
         </div>
     </div>

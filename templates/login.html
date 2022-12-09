@@ -1,45 +1,57 @@
-<link rel="stylesheet" href="../static/css/login.css" />
+<link rel="stylesheet" href="../static/css/login.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="login_page">
-  <div class="login">
-    <div><h1 class="header_title">Авторизация</h1></div>
-    <div>
-      <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <div class="data_block">
-          <div>
-            <label class="form-label">{{ form.email.label }}</label>
-            {{ form.email(class="form-control data", type="email") }} {% for
-            error in form.email.errors %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endfor %}
-          </div>
-          <div>
-            <label class="form-label">{{ form.password.label }}</label>
-            {{ form.password(class="form-control data", type="password") }} {%
-            for error in form.password.errors %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endfor %}
-          </div>
+    <div class="login">
+        <div><h1 class="header_title">Авторизация</h1></div>
+        <div>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="data_block">
+                    <div>
+                        <label class="form-label">{{ form.login.label }}</label>
+                        {{ form.login(class="form-control data", type="login") }} {% for
+                        error in form.login.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <label class="form-label">{{ form.password.label }}</label>
+                        {{ form.password(class="form-control data", type="password") }} {%
+                        for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="buttons_from">
+                    <div class="box">
+                        {{ form.remember_me(class="form-check-input data")}} {{
+                        form.remember_me.label }}<br/>
+                        {% for error in form.remember_me.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {{ form.submit(type="submit", class="button") }}
+                    <a class="button" type="submit" href="/register"
+                    >
+                        <div class="register"><p>Регистрация</p></div>
+                    </a
+                    >
+                </div>
+                <div class="message_block">
+                {% if message != '' %}
+                {% if danger %}
+                <div class="alert alert-danger message" role="alert">
+                    {{ message }}
+                </div>
+                {% else %}
+                <div class="alert alert-success message" role="alert">
+                    {{ message }}
+                </div>
+                {% endif %}
+                {% endif %}
+                </div>
+            </form>
         </div>
-        <div class="buttons_from">
-          <div class="box">
-            {{ form.remember_me(class="form-check-input data")}} {{
-            form.remember_me.label }}<br />
-            {% for error in form.remember_me.errors %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endfor %}
-          </div>
-          {{ form.submit(type="submit", class="button") }}
-          <a class="button" type="submit" href="/register"
-            ><div class="register"><p>Регистрация</p></div></a
-          >
-        </div>
-        {% if message != '' %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
-        {% endif %}
-      </form>
     </div>
-  </div>
 </div>
 {% endblock %}

@@ -35,11 +35,11 @@ def load_user(user_id):
 def login():
     if not current_user.is_authenticated:
         message = request.args.get('message') if request.args.get('message') else ''
-        email_repeat = request.args.get('email_repeat') if request.args.get('email_repeat') else False
+        danger = request.args.get('danger') if request.args.get('danger') else False
         form = LoginForm()
         if form.validate_on_submit():
             db_sess = db_session.create_session()
-            user = db_sess.query(User).filter(User.email == form.email.data).first()
+            user = db_sess.query(User).filter(User.email == form.login.data).first()
             if user and user.check_password(form.password.data):
                 if user.activated:
                     login_user(user, remember=form.remember_me.data)
@@ -47,11 +47,14 @@ def login():
                 else:
                     return render_template('login.html',
                                            message="Ваша почта не подтверждена",
+                                           danger=True,
                                            form=form)
             return render_template('login.html',
                                    message="Неправильный логин или пароль",
+                                   danger=True,
                                    form=form)
-        return render_template('login.html', title='Авторизация', form=form, message=message, email_repeat=email_repeat)
+        return render_template('login.html', title='Авторизация', form=form, message=message,
+                               danger=danger)
     else:
         return redirect('/')
 
@@ -109,7 +112,7 @@ def confirmation(token):
             data_session.close()
             return redirect('/login?message=Почта успешно подтверждена')
         else:
-            return redirect('/login?message=Пользователь не найден')
+            return redirect('/login?message=Пользователь не найден&danger=True')
     except SignatureExpired:
         data_session = db_session.create_session()
         users = data_session.query(User).filter(
@@ -118,7 +121,7 @@ def confirmation(token):
             list(map(lambda x: data_session.delete(x), users))
             data_session.commit()
         data_session.close()
-        return redirect('/login?message=Срок действия ссылки истек, данные удалены')
+        return redirect('/login?message=Срок действия ссылки истек, данные удалены&danger=True')
 
 
 def main():

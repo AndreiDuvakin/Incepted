@@ -2,8 +2,112 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="header_block">
-    <h2 class="header_title">#1 Сайт по проектированию!</h2>
-    <strong class="header_title_2">Создавай, пользуйся, составляй!</strong>
+<div class="header_block" id="header_block">
+    <div class="header_text">
+        <h2 class="header_title">INCEPTED</h2>
+        <strong class="header_title_2">Самый удобный сайт для создания проектов</strong>
+    </div>
+    <div class="header_buttons">
+        <a class="header_button" href="/register">
+            <div class="header_button_text">
+                <p>Регистрация</p>
+            </div>
+        </a>
+        <a class="header_button" id="link_to_about" href="#about_block">
+            <div class="header_button_text">
+                <p>Больше о нас</p>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="body_block">
+    <div class="about_block" id="about_block">
+        <h2 class="about_title">Почему INCEPTED?</h2>
+        <div class="about_info_block">
+            <div class="about_article_block">
+                <div class="about_article">
+                    <img class="article_image" src="../static/images/yellow_man.svg">
+                    <strong class="article_text">Проект INCEPTED позволяет создавать проекты, поддерживать их, вести
+                        учет активности участников,
+                        контролировать их материалы и получать уведомления по истечению срока дедлайна</strong>
+                </div>
+                <div class="about_article">
+                    <img class="article_image" src="../static/images/yellow_cup.svg">
+                    <strong class="article_text">Индивидуальные и расширенные возможности по созданию проектов</strong>
+                </div>
+                <div class="about_article">
+                    <img class="article_image" src="../static/images/yellow_like.svg">
+                    <strong class="article_text">Быстро, удобно, без лишних функций</strong>
+                </div>
+            </div>
+            <img src="../static/images/main_image_1.jpg" class="main_image">
+        </div>
+    </div>
+    <div class="how_work_block">
+        <h2 class="how_work_title">Как это работает ?</h2>
+        <div class="how_work_info_block">
+            <div class="how_work_info">
+                <img src="../static/images/main_image_2.png" class="how_work_image">
+                <div class="how_work_article">
+                    <strong class="how_work_article_title">Появление идеи</strong>
+                    <p class="how_work_article_text">Вы в любой момент можете создать и заполнить описание проекта, как
+                        и построить задачи для него.</p>
+                </div>
+            </div>
+            <div class="how_work_info">
+                <img src="../static/images/main_image_3.png" class="how_work_image">
+                <div class="how_work_article">
+                    <strong class="how_work_article_title">Сбор команды</strong>
+                    <p class="how_work_article_text">Вы можете добавить участников в свою команду и дать им необходимые
+                        задачи.</p>
+                </div>
+            </div>
+            <div class="how_work_info">
+                <img src="../static/images/main_image_4.png" class="how_work_image">
+                <div class="how_work_article">
+                    <strong class="how_work_article_title">Проверка выполнения</strong>
+                    <p class="how_work_article_text">В редакторе проекта вы можете отслеживать выполнение задач
+                        участников и проверять их</p>
+                </div>
+            </div>
+            <div class="how_work_info">
+                <img src="../static/images/main_image_5.png" class="how_work_image">
+                <div class="how_work_article">
+                    <strong class="how_work_article_title">Представление проекта</strong>
+                    <p class="how_work_article_text">После завершения проекта вы можете вывести в виде архива со всеми
+                        нужными файлами или заморозить его.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reg_block">
+        <h2 class="reg_title">Зарегистрируйся и пользуйся!</h2>
+        <div class="reg_content_block">
+            <div class="reg_content">
+                <p class="reg_button_title">Проектирование ждет тебя !</p>
+                <div class="reg_button_group">
+                    <a class="reg_button" href="/register">
+                        <div class="reg_button_text">
+                            <strong>Регистрация</strong>
+                        </div>
+                    </a>
+                    <a class="reg_button" id="link_to_start" href="#header_block">
+                        <div class="reg_button_text" id="link_to_start_text">
+                            <strong>В самое начало</strong>
+                        </div>
+                    </a>
+                </div>
+                <p class="reg_button_info">Регистрируясь, вы подтверждаете политику конфиденциальности.</p>
+            </div>
+            <img src="../static/images/main_image_6.jpg" class="main_image">
+        </div>
+    </div>
+    <div class="feedback_block">
+        <div class="feedback">
+            <h2 class="feedback_title">Вы можете связаться с нами:</h2>
+            <img class="feedback_logo" src="../static/images/logo_b.png">
+            <p><strong class="feedback_mail">Почта:</strong> <a href="mailto:incepted@yandex.ru" class="feedback_mail">incepted@yandex.ru</a></p>
+        </div>
+    </div>
 </div>
 {% endblock %}

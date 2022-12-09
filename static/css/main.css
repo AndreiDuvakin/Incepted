@@ -1,6 +1,10 @@
 main, html {
     background-color: #dcb495;
 }
+#header_block {
+    position: absolute;
+    margin-bottom: 60%;
+}
 .header_block {
     width: 100%;
     height: 75vw;
@@ -47,6 +51,10 @@ main, html {
     color: #000000;
     border-radius: 30px;
     vertical-align: middle;
+}
+.header_button:hover {
+    text-decoration: none;
+    color: #000000;
 }
 #link_to_about {
     margin-left: 40px;
@@ -138,13 +146,13 @@ main, html {
 }
 .reg_block {
     margin-top: 20%;
-    margin-left: 5%;
-    width: 90%;
+    width: 100%;
     height: 50vw;
 }
 .reg_content_block {
     margin-top: 100px;
-    width: 100%;
+    width: 90%;
+    margin-left: 5%;
     display: inline-flex;
     justify-content: space-between;
     flex-wrap: nowrap;
@@ -183,11 +191,15 @@ main, html {
 }
 .reg_button {
     background-color: #a8886f;
-    width: 18vw;
+    width: 20vw;
     height: 5vw;
     color: #ffffff;
     border-radius: 30px;
     vertical-align: middle;
+}
+.reg_button:hover {
+    text-decoration: none;
+    color: #ffffff;
 }
 .reg_button_text {
     width: 100%;
@@ -197,6 +209,7 @@ main, html {
     margin-top: 6%;
 }
 #link_to_start{
+    width: 18vw;
     background-color:#f5d3b8;
 }
 #link_to_start_text {
@@ -236,4 +249,10 @@ main, html {
 .feedback_mail {
     font-size: 1.5vw;
     color: #000000;
+    transition: color 0.5s ease-in, border-bottom 0.5s ease-in;
+}
+.feedback_mail:hover {
+    color: #694a2d;
+    border-bottom: 3px solid #f3c79e;
+    text-decoration: none;
 }

@@ -10,17 +10,23 @@ body {
     display: inline-flex;
     height: 8vw;
 }
+#navbar {
+    position: fixed;
+    width: 100%;
+    transition: top 0.3s;
+    opacity: .9;
+    border-bottom: 1px solid #bf9c81;
+}
 .auth_button {
     color: #ffffff;
     font-size: 1.5vw;
-    transition: font-size 0.5s ease-in, text-shadow 1s ease-in;
+    transition: color 0.5s ease-in, border-bottom 0.5s ease-in;
 }
 .auth_button:hover {
-    font-size: 1.55vw;
-    color: #ffffff;
-    text-shadow: 0px 0px 20px #ffffff;
+    color: #694a2d;
+    border-bottom: 3px solid #f3c79e;
+    text-decoration: none;
 }
-
 .footer {
     background-color: #171717;
     height: 15vw;

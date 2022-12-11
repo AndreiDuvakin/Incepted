@@ -2,42 +2,42 @@
 {% extends "base.html" %} {% block content %}
 <div class="register_page">
     <div class="register">
-        <div><h1 class="header_title">Регистрация</h1></div>
+        <h1 class="header_title">Регистрация</h1>
         <div>
-            <form action="" method="post">
+            <form action="" method="post" class="register_form">
                 {{ form.hidden_tag() }}
                 <div class="data_block">
-                    <div>
+                    <div class="form_data">
                         <label class="form-label">{{ form.email.label }}</label>
-                        {{ form.email(class="form-control data", type="email") }} {% for
+                        {{ form.email(class="input_data", type="email", placeholder='example@mail.ex') }} {% for
                         error in form.email.errors %}
                         <div class="alert alert-danger" role="alert">{{ error }}</div>
                         {% endfor %}
                     </div>
-                    <div>
+                    <div class="form_data">
                         <label class="form-label">{{ form.name.label }}</label>
-                        {{ form.name(class="form-control data", type="name") }} {%
+                        {{ form.name(class="input_data", type="name", placeholder='name') }} {%
                         for error in form.name.errors %}
                         <div class="alert alert-danger" role="alert">{{ error }}</div>
                         {% endfor %}
                     </div>
-                    <div>
+                    <div class="form_data">
                         <label class="form-label">{{ form.login.label }}</label>
-                        {{ form.login(class="form-control data", type="login") }} {%
+                        {{ form.login(class="input_data", type="login", placeholder='login') }} {%
                         for error in form.login.errors %}
                         <div class="alert alert-danger" role="alert">{{ error }}</div>
                         {% endfor %}
                     </div>
-                    <div>
+                    <div class="form_data">
                         <label class="form-label">{{ form.password.label }}</label>
-                        {{ form.password(class="form-control data", type="password") }} {%
+                        {{ form.password(class="input_data", type="password", placeholder='good_password') }} {%
                         for error in form.password.errors %}
                         <div class="alert alert-danger" role="alert">{{ error }}</div>
                         {% endfor %}
                     </div>
-                </div>
-                <div class="buttons_from">
-                    {{ form.submit(type="submit", class="button") }}
+                    <div class="form_data_button">
+                        {{ form.submit(type="submit", class="register_button") }}
+                    </div>
                 </div>
                 <div class="message_block">
                     {% if message != '' %}

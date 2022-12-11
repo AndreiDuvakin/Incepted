@@ -39,9 +39,9 @@ body {
     align-content: center;
     align-items: center;
 }
-.footer_logo {
+.footer_logo, .nav_logo {
     width: 7vw;
-    height: 7vw;
+    height: 6vw;
 }
 .footer_rights {
     color: #ffffff;

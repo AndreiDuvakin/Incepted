@@ -246,12 +246,12 @@ main, html {
     width: 10vw;
     height: 10vw;
 }
-.feedback_mail {
+.feedback_mail, .feedback_mail_link {
     font-size: 1.5vw;
     color: #000000;
     transition: color 0.5s ease-in, border-bottom 0.5s ease-in;
 }
-.feedback_mail:hover {
+.feedback_mail_link:hover {
     color: #694a2d;
     border-bottom: 3px solid #f3c79e;
     text-decoration: none;

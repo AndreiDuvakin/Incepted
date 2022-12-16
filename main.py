@@ -1,11 +1,14 @@
 import datetime
+import os
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
+from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import redirect
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 from functions import check_password, mail
+from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
 from data.users import User
@@ -22,7 +25,63 @@ login_manager.init_app(app)
 
 @app.route('/')
 def base():
-    return render_template('main.html', title='Главная')
+    if not current_user.is_authenticated:
+        return render_template('main.html', title='Главная')
+    else:
+        return redirect('/project')
+
+
+@app.route('/project')
+def project():
+    if current_user.is_authenticated:
+        return redirect(f'/profile')
+    else:
+        return redirect('/login')
+
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    if current_user.is_authenticated:
+        form = EditProfileForm(
+            CombinedMultiDict((request.files, request.form)),
+            email=current_user.email,
+            name=current_user.name,
+            surname=current_user.surname,
+            about=current_user.about,
+            birthday=current_user.birthday
+        )
+        if form.del_photo.data:
+            data_session = db_session.create_session()
+            user = data_session.query(User).filter(User.id == current_user.id).first()
+            if not user:
+                return render_template('profile.html', title='Профиль', form=form,
+                                       message='Ошибка, пользователь ненайден')
+            os.remove(current_user.photo)
+            user.photo = 'static/images/none_logo.png'
+            data_session.commit()
+            data_session.close()
+        if form.validate_on_submit():
+            data_session = db_session.create_session()
+            user = data_session.query(User).filter(User.id == current_user.id).first()
+            if not user:
+                return render_template('profile.html', title='Профиль', form=form,
+                                       message='Ошибка, пользователь ненайден')
+            if form.email.data != current_user.email:
+                pass
+            if form.photo.data:
+                with open(f'static/app_files/user_logo/{current_user.login}.png', 'wb') as file:
+                    form.photo.data.save(file)
+                user.photo = f'static/app_files/user_logo/{current_user.login}.png'
+            user.name = form.name.data
+            user.surname = form.surname.data
+            user.about = form.about.data
+            user.birthday = form.birthday.data
+            data_session.commit()
+            data_session.close()
+            return redirect('/profile')
+        return render_template('profile.html', title='Профиль', form=form, message='')
+    else:
+        return redirect('/login')
 
 
 @login_manager.user_loader
@@ -56,7 +115,7 @@ def login():
         return render_template('login.html', title='Авторизация', form=form, message=message,
                                danger=danger)
     else:
-        return redirect('/')
+        return redirect('/project')
 
 
 @app.route('/logout')
@@ -84,7 +143,10 @@ def register():
                 email=form.email.data,
                 name=form.name.data,
                 login=form.login.data,
-                activity=datetime.datetime.now()
+                activity=datetime.datetime.now(),
+                data_reg=datetime.date.today(),
+                photo='static/images/none_logo.png',
+                role='user'
             )
             user.set_password(form.password.data)
             data_session.add(user)
@@ -97,7 +159,7 @@ def register():
             return redirect('/login?message=Мы выслали ссылку для подтверждения почты')
         return render_template('register.html', form=form, message='', title='Регистрация')
     else:
-        return redirect('/')
+        return redirect('/project')
 
 
 @app.route('/confirmation/<token>')

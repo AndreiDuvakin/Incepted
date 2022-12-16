@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="../static/css/profile.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="profile_page">
+    <div class="profile_block">
+        <div class="header_profile">
+            <img class="user_photo" src="../{{current_user.photo}}">
+        </div>
+        <div class="edit_form">
+            <form action="" method="post" class="register_form" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form_blocks">
+                    <div class="data_block">
+                        <div class="form_data">
+                            <label class="form-label">{{ form.email.label }}</label>
+                            {{ form.email(class="input_data", type="email", placeholder='example@mail.ex') }} {% for
+                            error in form.email.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="form_data">
+                            <label class="form-label">{{ form.name.label }}</label>
+                            {{ form.name(class="input_data", type="name", placeholder='name') }} {%
+                            for error in form.name.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="form_data">
+                            <label class="form-label">{{ form.surname.label }}</label>
+                            {{ form.surname(class="input_data", type="surname", placeholder='surname') }}
+                            {% for error in form.surname.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="data_block">
+                        <div class="form_data">
+                            <label class="form-label">{{ form.birthday.label }}</label>
+                            {{ form.birthday(class="input_data", type="date") }}
+                            {% for error in form.birthday.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form_data">
+                            <label class="form-label">{{ form.about.label }}</label>
+                            {{ form.about(class="input_data", type="name", placeholder='about') }} {%
+                            for error in form.about.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% if 'none' in current_user.photo %}
+                        <div class="form_data">
+                            <label class="form-label">{{ form.photo.label }}</label>
+                            {{ form.photo(class="input_data", type="file") }}
+                            {% for error in form.photo.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="form_data_button">
+                            {{ form.del_photo(type="submit", class="profile_button", id="delete_button") }}
+                        </div>
+                        {% endif %}
+                        <div class="message_block">
+                            {% if message != '' %}
+                            <div class="alert alert-danger message" role="alert">{{ message }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form_data_button">
+                    {{ form.submit(type="submit", class="profile_button") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

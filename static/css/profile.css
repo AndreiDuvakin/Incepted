@@ -1,0 +1,95 @@
+.profile_page {
+    display: flex;
+    flex-direction: column;
+    height: 70vw;
+    width: 100%;
+    background: linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url(../images/back_profile_one.jpg);background-repeat: repeat;  background-position: center;
+}
+.profile_block {
+    height: 80%;
+    width: 85%;
+    margin-left: 7.5%;
+    margin-top: 10%;
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(../images/back_profile_two.jpg);background-repeat: repeat;  background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+.header_profile {
+    display: inline;
+    flex-direction: column;
+    width: 15vw;
+    height: 15vw;
+    margin-top: 50px;
+    align-self: center;
+}
+.user_photo {
+    width: 15vw;
+    height: 15vw;
+    border: 0.2vw solid #ffffff;
+    border-radius: 2vw;
+}
+.edit_form {
+    align-self: center;
+    margin-top: 20px;
+    width: 80%;
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+.form_data_button {
+    align-self: center;
+}
+.form_blocks {
+    width: 100%;
+    margin-top: 50px;
+    display: inline-flex;
+    justify-content: space-evenly;
+}
+.form_data, .form_data_button {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+    margin-left: 2%;
+}
+.form_data_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.input_data {
+    color: #000000;
+    border: 0.1vw solid #595008;
+    height: 4.5vw;
+    width: 20vw;
+    background-color: #dbc3af;
+    border-radius: 5vw;
+    font-size: 1.3vw;
+    display: inline-flex;
+    align-items: center;
+}
+.input_button {
+    width: 10vw;
+    height: 5vw;
+    border-radius: 5vw;
+    vertical-align: middle;
+}
+.form-label {
+    font-size: 1.3vw;
+    color: #ffffff;
+    font-weight: bold;
+}
+.profile_button {
+    margin-top: 15px;
+    width: 20vw;
+    height: 5vw;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 5vw;
+    vertical-align: middle;
+    font-size: 1.5vw;
+}
+#delete_button {
+    margin-top: 45px;
+}

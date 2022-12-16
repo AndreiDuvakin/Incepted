@@ -256,3 +256,16 @@ main, html {
     border-bottom: 3px solid #f3c79e;
     text-decoration: none;
 }
+.scroll_button {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    background-color: #e5e5e5;
+    border-radius: 2vw;
+    margin-left: 95%;
+    margin-top: 45%;
+    transition: background-color 0.5s ease-in;
+}
+.scroll_button:hover {
+    background-color: #1c59fe;
+}

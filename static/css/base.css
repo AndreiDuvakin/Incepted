@@ -33,7 +33,7 @@ body {
 }
 .footer_block {
     height: 100%;
-    width: 90%; 
+    width: 90%;
     margin-left: 5%;
     display: flex;
     align-content: center;
@@ -48,4 +48,44 @@ body {
     font-size: 1.5vw;
     width: 85%;
     text-align: center;
+}
+.nav_panel {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+}
+.nav_user {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+}
+.nav_user_name {
+    margin-left: 10px;
+    align-self: center;
+}
+.nav_chapter_text {
+    height: 100%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: bold;
+    color: #946137;
+    font-size: 2vw;
+    transition: color 0.3s ease-in;
+}
+.nav_chapter_text:hover {
+    color: #f3d5be;
+}
+.nav_chapter {
+    text-align: center;
+    width: 30%;
+    border-bottom: 0.2vw solid #d49d51;  
+    transition: border-bottom 0.3s ease-in;
+}
+.nav_chapter:hover {
+    text-decoration: none;  
+    border-bottom: 0.2vw solid #face7d;  
+}
+.nav_user_name_div {
+    height: 100%;
 }

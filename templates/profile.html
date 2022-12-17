@@ -44,7 +44,7 @@
                         </div>
                         <div class="form_data">
                             <label class="form-label">{{ form.about.label }}</label>
-                            {{ form.about(class="input_data", type="name", placeholder='about') }} {%
+                            {{ form.about(class="input_data dop_data", type="name", placeholder='about') }} {%
                             for error in form.about.errors %}
                             <div class="alert alert-danger" role="alert">{{ error }}</div>
                             {% endfor %}
@@ -52,7 +52,7 @@
                         {% if 'none' in current_user.photo %}
                         <div class="form_data">
                             <label class="form-label">{{ form.photo.label }}</label>
-                            {{ form.photo(class="input_data", type="file") }}
+                            {{ form.photo(class="input_data dop_data", type="file") }}
                             {% for error in form.photo.errors %}
                             <div class="alert alert-danger" role="alert">{{ error }}</div>
                             {% endfor %}
@@ -71,6 +71,11 @@
                 </div>
                 <div class="form_data_button">
                     {{ form.submit(type="submit", class="profile_button") }}
+                    <a class="profile_button" id="logout_button" href="/logout">
+                        <div class="profile_button_text">
+                            <p>Выйти</p>
+                        </div>
+                    </a>
                 </div>
             </form>
         </div>

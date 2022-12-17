@@ -266,6 +266,13 @@ main, html {
     margin-top: 45%;
     transition: background-color 0.5s ease-in;
 }
+.scroll_image {
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2vw;
+}
 .scroll_button:hover {
     background-color: #1c59fe;
 }

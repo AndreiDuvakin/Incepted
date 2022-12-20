@@ -97,8 +97,11 @@ def login():
         danger = request.args.get('danger') if request.args.get('danger') else False
         form = LoginForm()
         if form.validate_on_submit():
-            db_sess = db_session.create_session()
-            user = db_sess.query(User).filter(User.email == form.login.data).first()
+            data_session = db_session.create_session()
+            user = data_session.query(User).filter(User.email == form.login.data).first()
+            if not user:
+                user = data_session.query(User).filter(User.login == form.login.data).first()
+            data_session.close()
             if user and user.check_password(form.password.data):
                 if user.activated:
                     login_user(user, remember=form.remember_me.data)

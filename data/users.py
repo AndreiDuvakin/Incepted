@@ -22,7 +22,7 @@ class User(SqlAlchemyBase, UserMixin):
     password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     data_reg = sqlalchemy.Column(sqlalchemy.Date,
                                  default=date.today())
-    role = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    role = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("roles.id"), nullable=True)
     activity = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     birthday = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
     activated = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)

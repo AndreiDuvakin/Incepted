@@ -36,17 +36,17 @@
                     {% endfor %}
                 </div>
                 <div class="message_block">
-                {% if message != '' %}
-                {% if danger %}
-                <div class="alert alert-danger message" role="alert">
-                    {{ message }}
-                </div>
-                {% else %}
-                <div class="alert alert-success message" role="alert">
-                    {{ message }}
-                </div>
-                {% endif %}
-                {% endif %}
+                    {% if message != '' %}
+                    {% if danger %}
+                    <div class="alert alert-danger message" role="alert">
+                        {{ message }}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success message" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    {% endif %}
                 </div>
             </form>
         </div>

@@ -12,6 +12,7 @@ from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
 from data.users import User
+from data.files import Files
 from waitress import serve
 from data import db_session
 
@@ -28,13 +29,13 @@ def base():
     if not current_user.is_authenticated:
         return render_template('main.html', title='Главная')
     else:
-        return redirect('/project')
+        return redirect('/projects')
 
 
-@app.route('/project')
+@app.route('/projects')
 def project():
     if current_user.is_authenticated:
-        return redirect(f'/profile')
+        return render_template('projects.html', title='Проекты')
     else:
         return redirect('/login')
 
@@ -105,7 +106,7 @@ def login():
             if user and user.check_password(form.password.data):
                 if user.activated:
                     login_user(user, remember=form.remember_me.data)
-                    return redirect('/')
+                    return redirect('/projects')
                 else:
                     return render_template('login.html',
                                            message="Ваша почта не подтверждена",
@@ -118,7 +119,7 @@ def login():
         return render_template('login.html', title='Авторизация', form=form, message=message,
                                danger=danger)
     else:
-        return redirect('/project')
+        return redirect('/projects')
 
 
 @app.route('/logout')
@@ -149,7 +150,7 @@ def register():
                 activity=datetime.datetime.now(),
                 data_reg=datetime.date.today(),
                 photo='static/images/none_logo.png',
-                role='user'
+                role=1
             )
             user.set_password(form.password.data)
             data_session.add(user)
@@ -162,7 +163,7 @@ def register():
             return redirect('/login?message=Мы выслали ссылку для подтверждения почты')
         return render_template('register.html', form=form, message='', title='Регистрация')
     else:
-        return redirect('/project')
+        return redirect('/projects')
 
 
 @app.route('/confirmation/<token>')

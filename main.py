@@ -7,7 +7,7 @@ from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import redirect
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
-from functions import check_password, mail
+from functions import check_password, mail, init_db_default
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
@@ -32,9 +32,11 @@ def base():
         return redirect('/projects')
 
 
-@app.route('/projects')
+@app.route('/projects', methods=['GET', 'POST'])
 def project():
     if current_user.is_authenticated:
+        if request.method == 'POST':
+            print(request.form.to_dict())
         return render_template('projects.html', title='Проекты')
     else:
         return redirect('/login')
@@ -190,8 +192,17 @@ def confirmation(token):
         return redirect('/login?message=Срок действия ссылки истек, данные удалены&danger=True')
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page404.html', title='Страница не найдена')
+
+
 def main():
-    db_session.global_init("db/incepted.db")
+    db_path = 'db/incepted.db'
+    db = os.path.exists(db_path)
+    db_session.global_init(db_path)
+    if not db:
+        init_db_default()
     serve(app, host='0.0.0.0', port=5000)
 
 

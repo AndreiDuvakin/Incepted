@@ -1,5 +1,7 @@
 import smtplib
 from email.message import EmailMessage
+from data.roles import Roles
+from data import db_session
 
 
 def check_password(password=''):
@@ -35,3 +37,16 @@ def mail(msg, to, topic='Подтверждение почты'):
     mailServer.ehlo()
     mailServer.send_message(em)
     mailServer.quit()
+
+
+def init_db_default():
+    data_session = db_session.create_session()
+    roles = [['admin', 2], ['moderator', 1], ['user', 0]]
+    for i in roles:
+        role = Roles(
+            name=i[0],
+            rights=i[1]
+        )
+        data_session.add(role)
+    data_session.commit()
+    data_session.close()

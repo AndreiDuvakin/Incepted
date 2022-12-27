@@ -1,6 +1,40 @@
 <link rel="stylesheet" href="../static/css/projects.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="projects_page">
-
+    <div class="header_block">
+        <h2 class="header_title">КНИЖКИ</h2>
+        <strong class="header_title_2">Здесь вы можете создавать свои проекты, изменять их, ставить дату дедлайна и
+            добавлять участников в своей проект.</strong>
+    </div>
+    <div class="find_block">
+        <form action="" method="post">
+            <input class="find_input_text" type="text" placeholder="Имя проекта" name="find_text">
+            <button class="find_input_button">Поиск</button>
+        </form>
+    </div>
+    <div class="list_project_block">
+        <div class="accordion list_project" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item project">
+                <h2 class="accordion-header project_header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button priject_header_button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapseOne">
+                        Project 1
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
+                     aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the
+                        collapse plugin adds the appropriate classes that we use to style each element. These classes
+                        control the overall appearance, as well as the showing and hiding via CSS transitions. You can
+                        modify any of this with custom CSS or overriding our default variables. It's also worth noting
+                        that just about any HTML can go within the <code>.accordion-body</code>, though the transition
+                        does limit overflow.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

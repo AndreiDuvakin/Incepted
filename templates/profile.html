@@ -10,6 +10,11 @@
                     Редикторовать
                 </div>
             </a>
+            <a class="profile_button" id="logout_button" href="/logout">
+                <div class="profile_button_text">
+                    <p>Выйти</p>
+                </div>
+            </a>
         </div>
     </div>
     <div class="profile_block collapse" id="collapseExample">
@@ -88,11 +93,6 @@
                 </div>
                 <div class="form_data_button">
                     {{ form.submit(type="submit", class="profile_button") }}
-                    <a class="profile_button" id="logout_button" href="/logout">
-                        <div class="profile_button_text">
-                            <p>Выйти</p>
-                        </div>
-                    </a>
                 </div>
             </form>
         </div>

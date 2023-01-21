@@ -1,6 +1,8 @@
 import smtplib
 from email.message import EmailMessage
 from data.roles import Roles
+from data.users import User
+from data.staff_projects import StaffProjects
 from data import db_session
 
 
@@ -50,3 +52,28 @@ def init_db_default():
         data_session.add(role)
     data_session.commit()
     data_session.close()
+
+
+def get_user_data(user):
+    resp = {
+        'name': user.name,
+        'surname': user.surname,
+        'login': user.login,
+        'email': user.email,
+        'photo': user.photo,
+        'role': user.role
+    }
+    return resp
+
+
+def get_projects_data(project):
+    data_session = db_session.create_session()
+    resp = {
+        'id': project.id,
+        'name': project.name,
+        'logo': project.photo,
+        'description': project.description,
+        'staff': list(map(lambda x: get_user_data(x), data_session.query(User).filter(
+            User.id.in_(*data_session.query(StaffProjects.user).filter(StaffProjects.id == project.id).all())).all()))
+    }
+    return resp

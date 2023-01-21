@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 class EditProfileForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
     name = StringField('Имя', validators=[DataRequired()])
-    surname = StringField('Фамилия', )
+    surname = StringField('Фамилия')
     about = TextAreaField('Расскажите о себе', default='')
     birthday = DateField('Дата рождения')
     photo = FileField('Фото', validators=[FileAllowed(['jpg', 'png', 'bmp'], 'Только фотографии!')])

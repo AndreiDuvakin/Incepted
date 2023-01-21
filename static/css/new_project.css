@@ -1,0 +1,38 @@
+.new_project_page {
+    height: 120vw;
+    background-color: #dcb495;
+}
+.form_data, .form_data_button {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+}
+.form_data_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.input_data {
+    color: #000000;
+    border: 0.1vw solid #595008;
+    height: 4.5vw;
+    min-height: 4.5vw;
+    width: 35vw;
+    background-color: #dbc3af;
+    border-radius: 4.5vw;
+    font-size: 1.3vw;
+    display: inline-flex;
+    align-items: center;
+}
+.input_button {
+    width: 10vw;
+    height: 5vw;
+    border-radius: 5vw;
+    vertical-align: middle;
+}
+.form_label {
+    font-size: 1.3vw;
+    color: #ffffff;
+    font-weight: bold;
+}

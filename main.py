@@ -1,18 +1,24 @@
 import datetime
 import os
+import pprint
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
 from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import redirect
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from sqlalchemy import or_
 
-from functions import check_password, mail, init_db_default
+from functions import check_password, mail, init_db_default, get_projects_data
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
+from forms.new_project import NewProjectForm
+
 from data.users import User
 from data.files import Files
+from data.projects import Projects
+from data.staff_projects import StaffProjects
 from waitress import serve
 from data import db_session
 
@@ -32,12 +38,30 @@ def base():
         return redirect('/projects')
 
 
+@app.route('/projects/new', methods=['GET', 'POST'])
+def new_project():
+    if current_user.is_authenticated:
+        form = NewProjectForm()
+        if form.validate_on_submit():
+            pass
+        return render_template('new_project.html', title='Новый проект', form=form)
+    else:
+        return redirect('/login')
+
+
 @app.route('/projects', methods=['GET', 'POST'])
 def project():
     if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        resp = []
         if request.method == 'POST':
-            print(request.form.to_dict())
-        return render_template('projects.html', title='Проекты')
+            pass
+        else:
+            projects = data_session.query(Projects).filter(or_(Projects.creator == current_user.id, current_user.id in
+                                                               data_session.query(StaffProjects.project).filter(
+                                                                   StaffProjects.user == current_user.id).all())).all()
+            resp = list(map(lambda x: get_projects_data(x), projects))
+        return render_template('projects.html', title='Проекты', list_projects=resp)
     else:
         return redirect('/login')
 

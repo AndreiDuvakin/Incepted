@@ -19,12 +19,12 @@
     </div>
     <div class="list_project_block">
         {% for project in list_projects %}
-        <div class="accordion list_project" id="accordionPanelsStayOpenExample">
+        <div class="accordion list_project" id="accordionPanelsStayOpen{{ project.id }}">
             <div class="accordion-item project">
-                <h2 class="accordion-header project_header" id="panelsStayOpen-headingOne">
+                <h2 class="accordion-header project_header" id="panelsStayOpen-heading{{ project.id }}">
                     <button class="accordion-button project_header_button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                            aria-controls="panelsStayOpen-collapseOne">
+                            data-bs-target="#panelsStayOpen-collapse{{ project.id }}" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapse{{ project.id }}">
                         <div class="project_button_block_one">
                             <div class="project_logo_block">
                                 <img src="{{ project.logo }}" class="project_logo">
@@ -35,8 +35,8 @@
                         </div>
                     </button>
                 </h2>
-                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse project_description_block"
-                     aria-labelledby="panelsStayOpen-headingOne">
+                <div id="panelsStayOpen-collapse{{ project.id }}" class="accordion-collapse collapse project_description_block"
+                     aria-labelledby="panelsStayOpen-heading{{ project.id }}">
                     <div class="accordion-body project_description">
                         <div class="collaborator_block">
                             <div class="staff_block">

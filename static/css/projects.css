@@ -39,8 +39,9 @@
     width: 45vw;
     height: 5vw;
     color: #776658;
-    border-radius: 30px;
+    border-radius: 5vw;
     vertical-align: middle;
+    font-size: 1.5vw;
 }
 .find_input_button {
     margin-left: 12px;
@@ -49,22 +50,23 @@
     width: 10vw;
     height: 5vw;
     color: #ffffff;
-    border-radius: 30px;
+    border-radius: 5vw;
     vertical-align: middle;
+    font-size: 1.5vw;
 }
 .list_project_block {
     margin-left: 3%;
-    border: 2px solid #694a2d;
-    border-radius: 25px;
+    border: 0.2vw solid #694a2d;
+    border-radius: 4.5vw;
     width: 94%;
     height: 45vw;
+    overflow-y: auto;
 }
 .list_project {
     width: 95%;
     margin-left: 2.5%;
-    height: 95%;
-    margin-top: 2.5%;
-    overflow-y: auto;
+    margin-top: 2vw;
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 .project_header_button {
@@ -88,7 +90,7 @@
 .project_logo_block {
     width: 4.5vw;
     height: 4.5vw;
-    border:2px solid #ffffff;
+    border: 0.3vw solid #ffffff;
     background-color: #ffffff;
     border-radius: 2vw;
     display: flex;

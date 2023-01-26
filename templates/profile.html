@@ -64,7 +64,7 @@
                         </div>
                         <div class="form_data">
                             <label class="form-label">{{ form.about.label }}</label>
-                            {{ form.about(class="input_data dop_data", type="name",
+                            {{ form.about(class="input_data dop_data about", type="name",
                             placeholder='about') }} {% for error in form.about.errors %}
                             <div class="alert alert-danger" role="alert">{{ error }}</div>
                             {% endfor %}

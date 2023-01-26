@@ -150,7 +150,7 @@ form {
     width: 20vw;
     height: 5vw;
     vertical-align: middle;
-    border-radius: 30px;
+    border-radius: 5vw;
 }
 .open_button:hover {
     text-decoration: none;
@@ -162,4 +162,7 @@ form {
     text-align: center;
     font-size: 1.5vw;
     margin-top: 5%;
+}
+.about {
+    border-radius: 2vw !important;
 }

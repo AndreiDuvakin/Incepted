@@ -4,6 +4,7 @@ from data.roles import Roles
 from data.users import User
 from data.staff_projects import StaffProjects
 from data import db_session
+import uuid
 
 
 def check_password(password=''):
@@ -56,6 +57,7 @@ def init_db_default():
 
 def get_user_data(user):
     resp = {
+        'id': user.id,
         'name': user.name,
         'surname': user.surname,
         'login': user.login,
@@ -68,12 +70,21 @@ def get_user_data(user):
 
 def get_projects_data(project):
     data_session = db_session.create_session()
+    staff = data_session.query(StaffProjects.user).filter(StaffProjects.project == project.id).all()
     resp = {
         'id': project.id,
         'name': project.name,
         'logo': project.photo,
         'description': project.description,
         'staff': list(map(lambda x: get_user_data(x), data_session.query(User).filter(
-            User.id.in_(*data_session.query(StaffProjects.user).filter(StaffProjects.id == project.id).all())).all()))
+            User.id.in_(list(map(lambda x: x[0], staff)))).all())) if staff else []
     }
+    resp['staff'].insert(0, get_user_data(data_session.query(User).filter(User.id == project.creator).first()))
     return resp
+
+
+def save_project_logo(photo):
+    filename = f'static/app_files/project_logo/{uuid.uuid4()}.png'
+    with open(filename, 'wb') as f:
+        photo.save(f)
+    return filename

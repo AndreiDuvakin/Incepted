@@ -7,4 +7,4 @@ class NewProjectForm(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     description = TextAreaField('Описание')
     logo = FileField('Логотип')
-    submit = SubmitField('Регистрация')
+    submit = SubmitField('Создать')

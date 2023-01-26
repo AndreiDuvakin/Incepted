@@ -1,15 +1,16 @@
 import datetime
 import os
-import pprint
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
+from flask_wtf import CSRFProtect
+from flask_restful import abort
 from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import redirect
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from sqlalchemy import or_
 
-from functions import check_password, mail, init_db_default, get_projects_data
+from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
@@ -25,6 +26,7 @@ from data import db_session
 app = Flask(__name__)
 key = 'test_secret_key'
 app.config['SECRET_KEY'] = key
+csrf = CSRFProtect(app)
 s = URLSafeTimedSerializer(key)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -38,13 +40,62 @@ def base():
         return redirect('/projects')
 
 
+@app.route('/projects/delete/<int:id_project>', methods=['GET', 'POST'])
+def delete_project(id_project):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        project_del = data_session.query(Projects).filter(Projects.id == id_project).first()
+        if project_del:
+            if project_del.creator == current_user.id:
+                staff = data_session.query(StaffProjects).filter(StaffProjects.project == id_project).all()
+                for i in staff:
+                    data_session.delete(i)
+                if 'none_project' not in project_del.photo:
+                    os.remove(project_del.photo)
+                data_session.delete(project_del)
+                data_session.commit()
+                data_session.close()
+                return redirect('/projects')
+            else:
+                abort(403)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
 @app.route('/projects/new', methods=['GET', 'POST'])
 def new_project():
     if current_user.is_authenticated:
         form = NewProjectForm()
+        data_session = db_session.create_session()
+        list_users = list(
+            map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
         if form.validate_on_submit():
-            pass
-        return render_template('new_project.html', title='Новый проект', form=form)
+            project = Projects(
+                name=form.name.data,
+                description=form.description.data,
+                date_create=datetime.datetime.now(),
+                creator=current_user.id
+            )
+            project.photo = save_project_logo(form.logo.data) if form.logo.data else 'static/images/none_project.png'
+            data_session.add(project)
+            data_session.flush()
+            data_session.refresh(project)
+            for i in list_users:
+                if request.form.getlist(f"choose_{i['login']}") and i['id'] != current_user.id:
+                    new_staffer = StaffProjects(
+                        user=i['id'],
+                        project=project.id,
+                        role='user',
+                        permission=3
+                    )
+                    data_session.add(new_staffer)
+            data_session.commit()
+            data_session.close()
+            return redirect('/projects')
+        data_session.close()
+        return render_template('new_project.html', title='Новый проект', form=form, list_users=list_users)
     else:
         return redirect('/login')
 
@@ -218,7 +269,12 @@ def confirmation(token):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page404.html', title='Страница не найдена')
+    return render_template('page_error.html', title='Страница не найдена', error='404', message='Страница не найдена')
+
+
+@app.errorhandler(403)
+def page_not_found(error):
+    return render_template('page_error.html', title='Ошибка доступа', error='403', message='Доступ сюда запрещен')
 
 
 def main():

@@ -13,7 +13,7 @@ class Projects(SqlAlchemyBase, UserMixin):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     photo = sqlalchemy.Column(sqlalchemy.Text)
-    date_create = sqlalchemy.Column(sqlalchemy.Date,
+    date_create = sqlalchemy.Column(sqlalchemy.DateTime,
                                     default=date.today())
     creator = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"), nullable=True, default=None)

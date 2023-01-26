@@ -1,7 +1,7 @@
 .navbar {
     display: none !important;
 }
-.page_404 {
+.page_error {
     height: 55vw;
     background-color: #dcb495;
     display: flex;

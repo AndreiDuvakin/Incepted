@@ -1,23 +1,40 @@
-<link rel="stylesheet" href="../static/css/projects.css"/>
+<link rel="stylesheet" href="../static/css/user_view.css"/>
 {% extends "base.html" %} {% block content %}
-<div class="projects_page">
-    <div class="header_block">
-        <h2 class="header_title">КНИЖКИ</h2>
-        <strong class="header_title_2">Здесь вы можете создавать свои проекты, изменять их, ставить дату дедлайна и
-            добавлять участников в своей проект.</strong>
-    </div>
-    <div class="find_block">
-        <form action="" method="post" class="form_project_block">
-            <input class="find_input_text" type="text" placeholder="Имя проекта" name="find_text">
-            <button class="find_input_button">Поиск</button>
-            <div class="new_project_button">
-                <a class="new_project_button_link" href="/projects/new">
-                    <p class="new_project_button_text">Создать</p>
-                </a>
+<div class="user_view_page">
+    <div class="user_data_block">
+        <div class="header_user">
+            <img class="user_photo" src="../{{user.photo}}"/>
+        </div>
+        <div class="user_data">
+            <div class="first_data_block">
+                <div class="name_block">
+                    <p class="data_header">Имя</p>
+                    <div class="data_block">
+                        <p class="data_text">{{ user.name }}</p>
+                    </div>
+                </div>
+                <div class="login_block">
+                    <p class="data_header">Логин</p>
+                    <div class="data_block">
+                        <p class="data_text">{{ user.login }}</p>
+                    </div>
+                </div>
             </div>
-        </form>
+            <div class="surname_block">
+                <p class="data_header">Фамилия</p>
+                <div class="data_block data_bottom">
+                    <p class="data_text">{{ user.surname }}</p>
+                </div>
+            </div>
+            <div class="about_block">
+                <p class="data_header">О себе</p>
+                <div class="data_block data_bottom about_bottom">
+                    <p class="data_text">{{ user.about }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="list_project_block">
+    <div class="user_projects_block">
         {% for project in list_projects %}
         <div class="accordion list_project" id="accordionPanelsStayOpen{{ project.id }}">
             <div class="accordion-item project">
@@ -27,7 +44,7 @@
                             aria-controls="panelsStayOpen-collapse{{ project.id }}">
                         <div class="project_button_block_one">
                             <div class="project_logo_block">
-                                <img src="{{ project.logo }}" class="project_logo">
+                                <img src="../{{ project.logo }}" class="project_logo">
                             </div>
                             <div class="project_title_block">
                                 <p class="project_title">{{ project.name }}</p>
@@ -35,7 +52,8 @@
                         </div>
                     </button>
                 </h2>
-                <div id="panelsStayOpen-collapse{{ project.id }}" class="accordion-collapse collapse project_description_block"
+                <div id="panelsStayOpen-collapse{{ project.id }}"
+                     class="accordion-collapse collapse project_description_block"
                      aria-labelledby="panelsStayOpen-heading{{ project.id }}">
                     <div class="accordion-body project_description">
                         <div class="collaborator_block">
@@ -43,7 +61,7 @@
                                 {% for user in project.staff %}
                                 <div class="user">
                                     <a class="link_to_user" href="/user/{{ user.login }}">
-                                        <img class="user_logo" src="{{user.photo}}">
+                                        <img class="user_logo" src="../{{user.photo}}">
                                         <p class="user_names">{{user.name}}</p>
                                     </a>
                                 </div>
@@ -56,13 +74,6 @@
                             </div>
                             <div class="description_block_text">
                                 <p class="description_text">{{ project.description }}</p>
-                            </div>
-                        </div>
-                        <div class="open_project_block">
-                            <div class="open_button">
-                                <a class="open_button_link" href="/projects/{{ project.id }}">
-                                    <p class="open_button_text">Открыть</p>
-                                </a>
                             </div>
                         </div>
                     </div>

@@ -64,6 +64,25 @@ def delete_project(id_project):
         return redirect('/login')
 
 
+@app.route('/user/<string:_login>', methods=['GET', 'POST'])
+def user_view(_login):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        user = data_session.query(User).filter(User.login == _login).first()
+        if user:
+            projects = data_session.query(Projects).filter(or_(Projects.creator == user.id, Projects.id.in_(
+                list(map(lambda x: x[0], data_session.query(
+                    StaffProjects.project).filter(
+                    StaffProjects.user == user.id).all()))))).all()
+            resp = list(map(lambda x: get_projects_data(x), projects))
+            return render_template('user_view.html', title=user.name + ' ' + user.surname, user=user,
+                                   list_projects=resp)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
 @app.route('/projects/new', methods=['GET', 'POST'])
 def new_project():
     if current_user.is_authenticated:

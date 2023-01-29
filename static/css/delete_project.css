@@ -1,0 +1,60 @@
+.delete_project_page {
+    height: 60vw;
+    background-color: #dcb495;
+}
+.form_block {
+    width: 100%;
+    height: 60vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.form_data {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+}
+.input_data {
+    color: #000000;
+    border: 0.1vw solid #595008;
+    height: 4.5vw;
+    min-height: 4.5vw;
+    width: 35vw;
+    background-color: #dbc3af;
+    border-radius: 4.5vw;
+    font-size: 1.3vw;
+    display: inline-flex;
+    align-items: center;
+}
+.form_label {
+    margin-top: 10px;
+    font-size: 1.3vw;
+    color: #ffffff;
+    font-weight: bold;
+}
+.delete_project_button {
+    margin-left: 15px;
+    width: 25vw;
+    height: 5vw;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 5vw;
+    vertical-align: middle;
+    font-size: 1.5vw;
+}
+form {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.conf_text {
+    color: #ff0000;
+}
+.header_title {
+    text-align: center;
+    color: #000000;
+    font-size: 3.5vw;
+    width: 100%;
+    margin-bottom: 15px;
+}

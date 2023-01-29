@@ -15,8 +15,9 @@ from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
 from forms.register import RegisterForm
-from forms.new_project import NewProjectForm
+from forms.project import ProjectForm
 from forms.recovery import RecoveryForm, NewPasswordForm
+from forms.conf_delete_project import DeleteProjectForm
 
 from data.users import User
 from data.quests import Quests
@@ -43,6 +44,63 @@ def base():
         return redirect('/projects')
 
 
+@app.route('/project/<int:id_project>/edit', methods=['GET', 'POST'])
+def edit_project(id_project):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
+        if current_project:
+            staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
+            if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
+                list_users = list(
+                    map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
+                staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(
+                    User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
+                form = ProjectForm()
+                if form.save.data:
+                    new_staff = []
+                    for i in list_users:
+                        if request.form.getlist(f"choose_{i['login']}") and i['id'] != current_user.id:
+                            new_staff.append(i)
+                            if i not in staff:
+                                new_staffer = StaffProjects(
+                                    user=i['id'],
+                                    project=current_project.id,
+                                    role='user',
+                                    permission=3
+                                )
+                                data_session.add(new_staffer)
+                        data_session.commit()
+                    if sorted(new_staff, key=lambda x: x['id']) != sorted(staff, key=lambda x: x['id']):
+                        for i in staff:
+                            if i not in new_staff:
+                                data_session.delete(data_session.query(StaffProjects).filter(
+                                    StaffProjects.user == i['id'], StaffProjects.project == current_project.id).first())
+                        data_session.commit()
+                    if form.logo.data:
+                        current_project.photo = save_project_logo(form.logo.data)
+                        data_session.commit()
+                    current_project.name = form.name.data
+                    current_project.description = form.description.data
+                    data_session.commit()
+                    return redirect(f'/project/{current_project.id}/edit')
+                if form.del_photo.data:
+                    os.remove(current_project.photo)
+                    current_project.photo = 'static/images/none_project.png'
+                    data_session.commit()
+                    return redirect(f'/project/{current_project.id}/edit')
+                form.name.data = current_project.name
+                form.description.data = current_project.description
+                return render_template('edit_project.html', title='Изменение проекта', form=form, list_users=list_users,
+                                       staff=staff, project=current_project)
+            else:
+                abort(403)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
 @app.route('/project/<int:id_project>')
 def project(id_project):
     if current_user.is_authenticated:
@@ -51,6 +109,7 @@ def project(id_project):
         if current_project:
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
             if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
+
                 return render_template('project.html', project=current_project, title=current_project.name)
             else:
                 abort(403)
@@ -103,22 +162,29 @@ def recovery():
         return redirect('/')
 
 
-@app.route('/projects/delete/<int:id_project>', methods=['GET', 'POST'])
+@app.route('/project/<int:id_project>/delete', methods=['GET', 'POST'])
 def delete_project(id_project):
     if current_user.is_authenticated:
         data_session = db_session.create_session()
         project_del = data_session.query(Projects).filter(Projects.id == id_project).first()
         if project_del:
             if project_del.creator == current_user.id:
-                staff = data_session.query(StaffProjects).filter(StaffProjects.project == id_project).all()
-                for i in staff:
-                    data_session.delete(i)
-                if 'none_project' not in project_del.photo:
-                    os.remove(project_del.photo)
-                data_session.delete(project_del)
-                data_session.commit()
-                data_session.close()
-                return redirect('/projects')
+                form = DeleteProjectForm()
+                if form.validate_on_submit():
+                    if form.conf.data != f'delete/{project_del.name}':
+                        return render_template('delete_project.html', title='Удаление проекта', form=form,
+                                               project=project_del,
+                                               message='Вы не правильно ввели фразу')
+                    staff = data_session.query(StaffProjects).filter(StaffProjects.project == id_project).all()
+                    for i in staff:
+                        data_session.delete(i)
+                    if 'none_project' not in project_del.photo:
+                        os.remove(project_del.photo)
+                    data_session.delete(project_del)
+                    data_session.commit()
+                    return redirect('/projects')
+                return render_template('delete_project.html', title='Удаление проекта', form=form, project=project_del,
+                                       message='')
             else:
                 abort(403)
         else:
@@ -149,7 +215,7 @@ def user_view(_login):
 @app.route('/projects/new', methods=['GET', 'POST'])
 def new_project():
     if current_user.is_authenticated:
-        form = NewProjectForm()
+        form = ProjectForm()
         data_session = db_session.create_session()
         list_users = list(
             map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
@@ -175,9 +241,7 @@ def new_project():
                     )
                     data_session.add(new_staffer)
             data_session.commit()
-            data_session.close()
             return redirect('/projects')
-        data_session.close()
         return render_template('new_project.html', title='Новый проект', form=form, list_users=list_users)
     else:
         return redirect('/login')
@@ -231,7 +295,6 @@ def profile():
             os.remove(current_user.photo)
             user.photo = 'static/images/none_logo.png'
             data_session.commit()
-            data_session.close()
         if form.validate_on_submit():
             data_session = db_session.create_session()
             user = data_session.query(User).filter(User.id == current_user.id).first()
@@ -249,7 +312,6 @@ def profile():
             user.about = form.about.data
             user.birthday = form.birthday.data
             data_session.commit()
-            data_session.close()
             return redirect('/profile')
         return render_template('profile.html', title='Профиль', form=form, message='')
     else:
@@ -273,7 +335,6 @@ def login():
             user = data_session.query(User).filter(User.email == form.login.data).first()
             if not user:
                 user = data_session.query(User).filter(User.login == form.login.data).first()
-            data_session.close()
             if user and user.check_password(form.password.data):
                 if user.activated:
                     login_user(user, remember=form.remember_me.data)
@@ -326,7 +387,6 @@ def register():
             user.set_password(form.password.data)
             data_session.add(user)
             data_session.commit()
-            data_session.close()
             token = s.dumps(form.email.data)
             link_conf = url_for('confirmation', token=token, _external=True)
             mail(f'Для завершения регистрации пройдите по ссылке: {link_conf}', form.email.data,
@@ -346,7 +406,6 @@ def confirmation(token):
         if user:
             user.activated = True
             data_session.commit()
-            data_session.close()
             return redirect('/login?message=Почта успешно подтверждена')
         else:
             return redirect('/login?message=Пользователь не найден&danger=True')
@@ -357,8 +416,12 @@ def confirmation(token):
         if users:
             list(map(lambda x: data_session.delete(x), users))
             data_session.commit()
-        data_session.close()
         return redirect('/login?message=Срок действия ссылки истек, данные удалены&danger=True')
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('page_error.html', title='Ошибка сервера', error='500', message='Технические шоколадки')
 
 
 @app.errorhandler(404)
@@ -367,7 +430,7 @@ def page_not_found(error):
 
 
 @app.errorhandler(403)
-def page_not_found(error):
+def access_error(error):
     return render_template('page_error.html', title='Ошибка доступа', error='403', message='Доступ сюда запрещен')
 
 

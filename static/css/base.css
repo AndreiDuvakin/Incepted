@@ -62,7 +62,7 @@ body {
     align-items: center;
 }
 .nav_user_name {
-    margin-left: 10px;
+    margin-left: 1vw;
     align-self: center;
 }
 .nav_chapter_text {
@@ -90,10 +90,10 @@ body {
     height: 100%;
 }
 body::-webkit-scrollbar {
-  width: 12px;               /* ширина scrollbar */
+  width: 0.8vw;               /* ширина scrollbar */
 }
 body::-webkit-scrollbar-thumb {
   background-color: #d49d51;    /* цвет плашки */
-  border-radius: 20px;       /* закругления плашки */
-  border: 3px solid #ffffff;
+  border-radius: 5vw;       /* закругления плашки */
+  border: 0.25vw solid #ffffff;
 }

@@ -1,5 +1,6 @@
 import sqlalchemy
 from flask_login import UserMixin
+from datetime import date
 
 from .db_session import SqlAlchemyBase
 

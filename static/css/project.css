@@ -22,7 +22,34 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    color: #dcb495
+    #a8886f
+    #f5d3b8
+    #a65b1e
+    #d49d51
+    #face7d
+    #ffe8d6
+    #a8876b
+    #fff2e8
+    #c79b77
+    #d69d5c;
 }
 .name_project {
     font-size: 3vw;
+}
+.edit_block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.edit_button {
+    width: 4.5vw;
+    height: 4.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.edit_button_image {
+    height: 3vw;
+    width: 3vw;
 }

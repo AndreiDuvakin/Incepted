@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="../../static/css/delete_project.css"/>
+{% extends "base.html" %} {% block content %}
+{% set name = 'delete/' + project.name %}
+<div class="delete_project_page">
+    <div class="form_block">
+        <h1 class="header_title">Удаление проекта</h1>
+        <form action="" method="post" class="register_form" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form_data">
+                <label class="form_label">Для подтверждения удаления введите <p class="conf_text">delete/{{ project.name
+                    }}</p></label>
+                {{ form.conf(class="input_data", type="conf", placeholder=name) }}
+                {% for error in form.conf.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {{ form.submit(type="submit", class="delete_project_button") }}
+        </form>
+        {% if message != '' %}
+        <div class="alert alert-danger message" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

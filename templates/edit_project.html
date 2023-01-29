@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="../../static/css/edit_project.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="edit_project_page">
+    <div class="form_block">
+        <form action="" method="post" class="register_form" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="name_form_block">
+                <div class="form_data">
+                    <label class="form_label">{{ form.name.label }}</label>
+                    {{ form.name(class="input_data label_data", type="name", placeholder='your project name') }}
+                    {% for error in form.name.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form_data">
+                    <label class="form_label">{{ form.description.label }}</label>
+                    {{ form.description(class="input_data description padding_data", type="description", placeholder='your project description') }}
+                    {% for error in form.description.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="data_form_block">
+                <div class="staff_form_block">
+                    <div class="collaborator_block">
+                        <div class="staff_block">
+                            {% for user in list_users %}
+                            <div class="user">
+                                <div class="user_data">
+                                    <img class="user_logo" src="../../{{user.photo}}">
+                                    <p class="user_names">{{user['name']}}</p>
+                                </div>
+                                {% if user not in staff %}
+                                <input class="choose_user" name="choose_{{user.login}}" type="checkbox" value="y">
+                                {% else %}
+                                <input class="choose_user" name="choose_{{user.login}}" type="checkbox" value="y" checked="yes">
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons_form_block">
+                    {% if 'none' in project.photo %}
+                        <div class="form_data">
+                            <label class="form_label">{{ form.logo.label }}</label>
+                            {{ form.logo(class="input_data padding_data", type="file") }}
+                            {% for error in form.logo.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="form_data_button">
+                            {{ form.del_photo(type="submit", class="delete_button") }}
+                        </div>
+                        {% endif %}
+                    <div class="form_data_button">
+                        {{ form.save(type="submit", class="project_button") }}
+                    </div>
+                    <a class="delete_project_link form_data_button" id="delete_project_link" href="/project/{{ project.id }}/delete">
+                        <p class="delete_project_link_text">Удалить проект</p>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

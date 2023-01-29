@@ -234,7 +234,7 @@
     overflow-x: auto;
     color: #000000 !important;
 }
-.new_project_button {
+.new_project_button, .find_project_button {
     width: 13vw;
     height: 5vw;
     background-color: #000000;
@@ -242,7 +242,7 @@
     border-radius: 3vw;
     margin-left: 2vw;
 }
-.new_project_button_text {
+.new_project_button_text, .find_project_button_text {
     width: 13vw;
     height: 5vw;
     text-align: center;
@@ -252,11 +252,11 @@
     align-items: center;
     justify-content: center;
 }
-.new_project_button_link {
+.new_project_button_lin, find_project_button_linkk {
     width: 13vw;
     height: 5vw;
 }
-.new_project_button_link:hover {
+.new_project_button_link:hover, .find_project_button_linkk:hover {
     text-decoration: none;
     color: #000000;
 }

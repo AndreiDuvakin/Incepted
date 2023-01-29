@@ -93,3 +93,13 @@
 .box {
     margin-left: 9vw;
 }
+.recovery_button {
+    color: #ffffff;
+    font-size: 1.5vw;
+    transition: color 0.5s ease-in, border-bottom 0.5s ease-in;
+}
+.recovery_button:hover {
+    color: #694a2d;
+    border-bottom: 3px solid #f3c79e;
+    text-decoration: none;
+}

@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="../static/css/project.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="projects_page">
+    <div class="project_header">
+        <div class="edit_block">
+
+        </div>
+        <div class="brand_block">
+            <img class="project_logo" src="../{{project.photo}}"/>
+            <p class="name_project">{{ project.name }}</p>
+        </div>
+        <div class="notification_block">
+
+        </div>
+    </div>
+    <div class="body_block">
+        <div class="staff_block">
+
+        </div>
+        <div class="task_block">
+
+        </div>
+    </div>
+    <div class="files_block">
+
+    </div>
+</div>
+{% endblock %}

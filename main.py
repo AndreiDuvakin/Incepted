@@ -13,10 +13,13 @@ from sqlalchemy import or_
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
+from forms.find_project import FindProjectForm
 from forms.register import RegisterForm
 from forms.new_project import NewProjectForm
+from forms.recovery import RecoveryForm, NewPasswordForm
 
 from data.users import User
+from data.quests import Quests
 from data.files import Files
 from data.projects import Projects
 from data.staff_projects import StaffProjects
@@ -38,6 +41,66 @@ def base():
         return render_template('main.html', title='Главная')
     else:
         return redirect('/projects')
+
+
+@app.route('/project/<int:id_project>')
+def project(id_project):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
+        if current_project:
+            staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
+            if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
+                return render_template('project.html', project=current_project, title=current_project.name)
+            else:
+                abort(403)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
+@app.route('/recovery/confirmation/<token>', methods=['GET', 'POST'])
+def conf_recovery(token):
+    try:
+        user_email = s.loads(token, max_age=86400)
+        data_session = db_session.create_session()
+        user = data_session.query(User).filter(User.email == user_email).first()
+        if user:
+            form = NewPasswordForm()
+            if form.validate_on_submit():
+                if form.password.data != form.repeat_password.data:
+                    return render_template('recovery.html', title='Восстановление', form=form, recovery=0,
+                                           message='Пароли не совпадают')
+                status_password = check_password(form.password.data)
+                if status_password != 'OK':
+                    return render_template('recovery.html', title='Восстановление', form=form, recovery=0,
+                                           message=str(status_password))
+                user.set_password(form.password.data)
+                data_session.commit()
+                mail(f'Для аккаунта {user.login}, успешно был обновлен пароль', user.email,
+                     'Изменение пароля')
+                return redirect('/login?message=Пароль обновлен')
+            return render_template('recovery.html', title='Восстановление', form=form, recovery=0, message='')
+        else:
+            return redirect('/login?message=Пользователь не найден&danger=True')
+    except SignatureExpired:
+        return redirect('/login?message=Срок действия ссылки истек&danger=True')
+
+
+@app.route('/recovery', methods=['GET', 'POST'])
+def recovery():
+    if not current_user.is_authenticated:
+        form = RecoveryForm()
+        if form.validate_on_submit():
+            token = s.dumps(form.email.data)
+            link_conf = url_for('conf_recovery', token=token, _external=True)
+            mail(f'Для сбросы пароля пройдите по ссылке: {link_conf}', form.email.data,
+                 'Восстановление доступа')
+            return redirect('/login?message=Мы выслали ссылку для сброса вам на почту')
+        return render_template('recovery.html', title='Восстановление пароля', form=form, recovery=True, message='')
+    else:
+        return redirect('/')
 
 
 @app.route('/projects/delete/<int:id_project>', methods=['GET', 'POST'])
@@ -70,11 +133,11 @@ def user_view(_login):
         data_session = db_session.create_session()
         user = data_session.query(User).filter(User.login == _login).first()
         if user:
-            projects = data_session.query(Projects).filter(or_(Projects.creator == user.id, Projects.id.in_(
+            current_projects = data_session.query(Projects).filter(or_(Projects.creator == user.id, Projects.id.in_(
                 list(map(lambda x: x[0], data_session.query(
                     StaffProjects.project).filter(
                     StaffProjects.user == user.id).all()))))).all()
-            resp = list(map(lambda x: get_projects_data(x), projects))
+            resp = list(map(lambda x: get_projects_data(x), current_projects))
             return render_template('user_view.html', title=user.name + ' ' + user.surname, user=user,
                                    list_projects=resp)
         else:
@@ -91,21 +154,22 @@ def new_project():
         list_users = list(
             map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
         if form.validate_on_submit():
-            project = Projects(
+            currnet_project = Projects(
                 name=form.name.data,
                 description=form.description.data,
                 date_create=datetime.datetime.now(),
                 creator=current_user.id
             )
-            project.photo = save_project_logo(form.logo.data) if form.logo.data else 'static/images/none_project.png'
-            data_session.add(project)
+            currnet_project.photo = save_project_logo(
+                form.logo.data) if form.logo.data else 'static/images/none_project.png'
+            data_session.add(currnet_project)
             data_session.flush()
-            data_session.refresh(project)
+            data_session.refresh(currnet_project)
             for i in list_users:
                 if request.form.getlist(f"choose_{i['login']}") and i['id'] != current_user.id:
                     new_staffer = StaffProjects(
                         user=i['id'],
-                        project=project.id,
+                        project=currnet_project.id,
                         role='user',
                         permission=3
                     )
@@ -120,18 +184,29 @@ def new_project():
 
 
 @app.route('/projects', methods=['GET', 'POST'])
-def project():
+def projects():
     if current_user.is_authenticated:
+        find = False
+        form = FindProjectForm()
         data_session = db_session.create_session()
         resp = []
-        if request.method == 'POST':
-            pass
-        else:
-            projects = data_session.query(Projects).filter(or_(Projects.creator == current_user.id, current_user.id in
-                                                               data_session.query(StaffProjects.project).filter(
-                                                                   StaffProjects.user == current_user.id).all())).all()
-            resp = list(map(lambda x: get_projects_data(x), projects))
-        return render_template('projects.html', title='Проекты', list_projects=resp)
+        current_projects = \
+            data_session.query(Projects).filter(or_(Projects.creator == current_user.id,
+                                                    Projects.id.in_(
+                                                        list(map(lambda x: x[0],
+                                                                 data_session.query(
+                                                                     StaffProjects.project).filter(
+                                                                     StaffProjects.user
+                                                                     == current_user.id).all()))))).all()
+        if form.validate_on_submit():
+            new_resp = []
+            for i in range(len(current_projects)):
+                if str(form.project.data).lower().strip() in str(current_projects[i].name).lower().strip():
+                    new_resp.append(current_projects[i])
+            current_projects = new_resp
+            find = True
+        resp = list(map(lambda x: get_projects_data(x), current_projects))
+        return render_template('projects.html', title='Проекты', list_projects=resp, form=form, find=find)
     else:
         return redirect('/login')
 

@@ -1,0 +1,28 @@
+.projects_page {
+    height: 120vw;
+    background-color: #dcb495;
+}
+.project_header {
+    height: 25vw;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.project_logo {
+    margin-top: 30px;
+    width: 15vw;
+    height: 15vw;
+    border: 0.2vw solid #ffffff;
+    border-radius: 2vw;
+}
+.brand_block {
+    height: 25vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.name_project {
+    font-size: 3vw;
+}

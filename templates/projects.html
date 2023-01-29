@@ -8,8 +8,19 @@
     </div>
     <div class="find_block">
         <form action="" method="post" class="form_project_block">
-            <input class="find_input_text" type="text" placeholder="Имя проекта" name="find_text">
-            <button class="find_input_button">Поиск</button>
+            {{ form.hidden_tag() }}
+            {{ form.project(class="find_input_text", type="text", placeholder='Имя проекта') }}
+            {% for error in form.project.errors %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+            {{ form.submit(type="submit", class="find_input_button") }}
+            {% if find == 1 %}
+            <div class="find_project_button">
+                <a class="find_project_button_link" href="/projects">
+                    <p class="find_project_button_text">Сброс</p>
+                </a>
+            </div>
+            {% endif %}
             <div class="new_project_button">
                 <a class="new_project_button_link" href="/projects/new">
                     <p class="new_project_button_text">Создать</p>
@@ -35,7 +46,8 @@
                         </div>
                     </button>
                 </h2>
-                <div id="panelsStayOpen-collapse{{ project.id }}" class="accordion-collapse collapse project_description_block"
+                <div id="panelsStayOpen-collapse{{ project.id }}"
+                     class="accordion-collapse collapse project_description_block"
                      aria-labelledby="panelsStayOpen-heading{{ project.id }}">
                     <div class="accordion-body project_description">
                         <div class="collaborator_block">
@@ -60,7 +72,7 @@
                         </div>
                         <div class="open_project_block">
                             <div class="open_button">
-                                <a class="open_button_link" href="/projects/{{ project.id }}">
+                                <a class="open_button_link" href="/project/{{ project.id }}">
                                     <p class="open_button_text">Открыть</p>
                                 </a>
                             </div>

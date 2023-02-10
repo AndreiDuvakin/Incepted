@@ -1,6 +1,6 @@
 import sqlalchemy
 from flask_login import UserMixin
-from datetime import date
+from datetime import datetime
 
 from .db_session import SqlAlchemyBase
 
@@ -13,6 +13,6 @@ class Quests(SqlAlchemyBase, UserMixin):
     creator = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"), nullable=True, default=None)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    date_create = sqlalchemy.Column(sqlalchemy.DateTime, default=date.today())
-    deadline = sqlalchemy.Column(sqlalchemy.DateTime, default=date.today())
+    date_create = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now())
+    deadline = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now())
     realized = sqlalchemy.Column(sqlalchemy.Boolean, default=False)

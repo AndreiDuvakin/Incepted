@@ -1,4 +1,5 @@
 import smtplib
+from json import loads
 from email.message import EmailMessage
 from data.roles import Roles
 from data.users import User
@@ -22,8 +23,9 @@ def check_password(password=''):
 
 
 def mail(msg, to, topic='Подтверждение почты'):
-    file = open('mail.incepted', 'r', encoding='utf-8').readline().split()
-    login, password = file[0], file[1]
+    with open('incepted.config', 'r', encoding='utf-8').read() as file:
+        file = loads(file)
+    login, password = file["mail_login"], file["mail_password"]
     email_server = "smtp.yandex.ru"
     sender = "incepted@yandex.ru"
     em = EmailMessage()

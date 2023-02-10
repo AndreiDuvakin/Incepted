@@ -22,20 +22,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    color: #dcb495
-    #a8886f
-    #f5d3b8
-    #a65b1e
-    #d49d51
-    #face7d
-    #ffe8d6
-    #a8876b
-    #fff2e8
-    #c79b77
-    #d69d5c;
+    color: #dcb495;
 }
 .name_project {
-    font-size: 3vw;
+    font-size: 3vw !important;
 }
 .edit_block {
     display: flex;
@@ -52,4 +42,109 @@
 .edit_button_image {
     height: 3vw;
     width: 3vw;
+}
+.collaborator_block {
+    width: 95%;
+    height: 25vw;
+    background-color: #EDCBB0;
+    border-radius: 2vw;
+    overflow-y: auto;
+}
+.staff_block {
+    margin: 20px;
+}
+.user {
+    width: 24vw;
+    height: 3.5vw;
+    background-color: #ffffff;
+    border: 2px solid #9E795A;
+    border-radius: 3vw;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+}
+.user_logo {
+    margin-left: 3px;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 5vw;
+    background-color: #000000;
+}
+.user_names {
+    margin-left: 9px;
+    margin-top: 10px;
+    overflow-x: auto;
+    color: #000000 !important;
+}
+.link_to_user {
+    width: 26vw;
+    height: 3.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+    text-decoration: none;
+}
+.link_to_user:hover {
+    text-decoration: none;
+}
+.head_staff_block {
+    display: flex;
+    width: 30vw;
+    flex-direction: column;
+    align-items: center;
+}
+.header_title, .header_title_2 {
+    text-align: center;
+    color: #000000;
+    font-size: 3vw;
+    margin-bottom: 15px;
+}
+.header_title {
+    width: 100%;
+}
+.header_task_block {
+    width: 60vw;
+    height: 30vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.task_block {
+    background-color: #EDCBB0;
+    width: 95%;
+    height: 25vw;
+    border-radius: 2vw;
+    overflow-y: auto;
+}
+.task {
+    margin: 20px;
+}
+.body_block {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-direction: row;
+}
+.new_task_block {
+    width: 4.5vw;
+    height: 4.5vw;
+}
+.new_task_link {
+    width: 4.5vw;
+    height: 4.5vw;
+}
+.new_task_image {
+    width: 4.5vw;
+    height: 4.5vw;
+}
+.head_task {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 60vw;
 }

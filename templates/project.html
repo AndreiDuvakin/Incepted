@@ -9,18 +9,42 @@
         </div>
         <div class="brand_block">
             <img class="project_logo" src="../{{project.photo}}"/>
-            <p class="name_project">{{ project.name }}</p>
+            <p class="name_project header_title">{{ project.name }}</p>
         </div>
         <div class="notification_block">
 
         </div>
     </div>
     <div class="body_block">
-        <div class="staff_block">
-
+        <div class="head_staff_block">
+            <h3 class="header_title">Участники</h3>
+            <div class="collaborator_block">
+                <div class="staff_block">
+                    {% for user in staff %}
+                    <div class="user">
+                        <a class="link_to_user" href="/user/{{ user.login }}">
+                            <img class="user_logo" src="../{{user.photo}}">
+                            <p class="user_names">{{user.name}}</p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <div class="task_block">
-
+        <div class="header_task_block">
+            <div class="head_task">
+                <h3 class="header_title_2">Задачи</h3>
+                <div class="new_task_block">
+                    <a class="new_task_link" href="/">
+                        <img class="new_task_image" src="../static/images/plus_b.png">
+                    </a>
+                </div>
+            </div>
+            <div class="task_block">
+                <div class="task">
+                    p
+                </div>
+            </div>
         </div>
     </div>
     <div class="files_block">

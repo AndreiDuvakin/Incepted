@@ -9,6 +9,7 @@ from werkzeug.datastructures import CombinedMultiDict
 from werkzeug.utils import redirect
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from sqlalchemy import or_
+from json import loads
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo
 from forms.edit_profile import EditProfileForm
@@ -28,7 +29,10 @@ from waitress import serve
 from data import db_session
 
 app = Flask(__name__)
-key = 'test_secret_key'
+with open('incepted.config', 'r', encoding='utf-8') as file:
+    file = file.read()
+    file = loads(file)
+key = file["encrypt_key"]
 app.config['SECRET_KEY'] = key
 csrf = CSRFProtect(app)
 s = URLSafeTimedSerializer(key)
@@ -83,7 +87,7 @@ def edit_project(id_project):
                     current_project.name = form.name.data
                     current_project.description = form.description.data
                     data_session.commit()
-                    return redirect(f'/project/{current_project.id}/edit')
+                    return redirect(f'/project/{current_project.id}')
                 if form.del_photo.data:
                     os.remove(current_project.photo)
                     current_project.photo = 'static/images/none_project.png'
@@ -109,8 +113,9 @@ def project(id_project):
         if current_project:
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
             if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
-
-                return render_template('project.html', project=current_project, title=current_project.name)
+                staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(
+                    User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
+                return render_template('project.html', project=current_project, title=current_project.name, staff=staff)
             else:
                 abort(403)
         else:
@@ -180,6 +185,7 @@ def delete_project(id_project):
                         data_session.delete(i)
                     if 'none_project' not in project_del.photo:
                         os.remove(project_del.photo)
+                    shutil.rmtree(f'static/app_files/all_projects/{str(project_del.id)}')
                     data_session.delete(project_del)
                     data_session.commit()
                     return redirect('/projects')
@@ -241,6 +247,7 @@ def new_project():
                     )
                     data_session.add(new_staffer)
             data_session.commit()
+            os.mkdir(f'static/app_files/all_projects/{str(currnet_project.id)}')
             return redirect('/projects')
         return render_template('new_project.html', title='Новый проект', form=form, list_users=list_users)
     else:
@@ -302,7 +309,12 @@ def profile():
                 return render_template('profile.html', title='Профиль', form=form,
                                        message='Ошибка, пользователь ненайден')
             if form.email.data != current_user.email:
-                pass
+                token = s.dumps(form.email.data)
+                link_conf = url_for('confirmation', token=token, _external=True)
+                mail(f'Для изменения почты пройдите по ссылке: {link_conf}', form.email.data,
+                     'Изменение почты')
+                user.activated = False
+                user.email = form.email.data
             if form.photo.data:
                 with open(f'static/app_files/user_logo/{current_user.login}.png', 'wb') as file:
                     form.photo.data.save(file)

@@ -35,14 +35,72 @@
             <div class="head_task">
                 <h3 class="header_title_2">Задачи</h3>
                 <div class="new_task_block">
-                    <a class="new_task_link" href="/">
+                    <a class="new_task_link" id="new_task_link" href="/">
                         <img class="new_task_image" src="../static/images/plus_b.png">
                     </a>
                 </div>
             </div>
             <div class="task_block">
                 <div class="task">
-                    p
+                    {% for quest in quests %}
+                    <div class="accordion list_quests" id="accordionPanelsStayOpen{{ quest.id }}">
+                        <div class="accordion-item quest">
+                            <h2 class="accordion-header quest_header" id="panelsStayOpen-heading{{ quest.id }}">
+                                <button class="accordion-button quest_header_button" type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapse{{ quest.id }}" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapse{{ quest.id }}">
+                                    <div class="quest_button_block_one">
+                                        <div class="quest_title_block">
+                                            <p class="quest_title">{{ quest.name }}</p>
+                                        </div>
+                                    </div>
+                                    {% if quest.overdue == 'yes' and quest.realized != 1 %}
+                                    <div class="deadline_block alert alert-danger" role="alert">
+                                        {{ quest.time_left }}
+                                    </div>
+                                    {% elif quest.overdue == 'today' and quest.realized != 1 %}
+                                    <div class="deadline_block alert alert-warning" role="alert">
+                                        Дедлайн сегодня
+                                    </div>
+                                    {% elif quest.overdue == 'no' and quest.realized != 1 %}
+                                    <div class="deadline_block alert alert-success" role="alert">
+                                        {{ quest.time_left }}
+                                    </div>
+                                    {% else %}
+                                    <div class="deadline_block alert alert-success" role="alert">
+                                        Задача выполнена
+                                    </div>
+                                    {% endif %}
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapse{{ quest.id }}"
+                                 class="accordion-collapse collapse quest_body_block"
+                                 aria-labelledby="panelsStayOpen-heading{{ quest.id }}">
+                                <div class="accordion-body quest_body">
+                                    {% if quest.realized == 0 %}
+                                    <div class="quest_body">
+                                        <div class="quest_description_block">
+                                            <p class="quest_description_title">Описание</p>
+                                            <div class="quest_description">
+                                                <p class="quest_description_text">{{ quest.description }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="quest_solve_button">
+                                            <a class="quest_solve_link" id="quest_solve_link">
+                                                <p id="quest_solve_link_id" class="{{ quest.id }}"></p>
+                                                <p class="quest_solve_text">Решить</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% else %}
+
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -11,7 +11,8 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from sqlalchemy import or_
 from json import loads
 
-from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo
+from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
+    overdue_quest_project
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
@@ -115,7 +116,15 @@ def project(id_project):
             if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
                 staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(
                     User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
-                return render_template('project.html', project=current_project, title=current_project.name, staff=staff)
+                quests = data_session.query(Quests).filter(Quests.project == current_project.id).all()
+                if quests:
+                    quests.sort(key=lambda x: (x.realized, x.deadline))
+                    quests = list(map(lambda x: overdue_quest_project(x), quests))
+                return render_template('project.html',
+                                       project=current_project,
+                                       title=current_project.name,
+                                       staff=staff,
+                                       quests=quests)
             else:
                 abort(403)
         else:

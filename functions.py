@@ -1,3 +1,4 @@
+import datetime
 import smtplib
 from json import loads
 from email.message import EmailMessage
@@ -6,6 +7,7 @@ from data.users import User
 from data.staff_projects import StaffProjects
 from data import db_session
 import uuid
+import pymorphy2
 
 
 def check_password(password=''):
@@ -90,3 +92,31 @@ def save_project_logo(photo):
     with open(filename, 'wb') as f:
         photo.save(f)
     return filename
+
+
+def overdue_quest_project(quest):
+    if str(quest.deadline.date()) == str(datetime.datetime.now().date()):
+        quest.overdue = 'today'
+    elif quest.deadline < datetime.datetime.now():
+        quest.overdue = 'yes'
+        quest.time_left = 'Просрочено на' + round_date(quest.deadline)
+    else:
+        quest.overdue = 'no'
+        quest.time_left = 'Еще есть: ' + round_date(quest.deadline)
+    return quest
+
+
+def round_date(date_time):
+    morph = pymorphy2.MorphAnalyzer()
+    difference = abs(date_time - datetime.datetime.now()).days
+    resp = ''
+    if difference // 365:
+        resp += f'{difference // 365} {morph.parse("год")[0].make_agree_with_number(difference // 365).word}'
+        difference -= 365 * (difference // 365)
+    if difference // 30:
+        resp += ', ' if resp else ' ' + f'{difference // 30}' \
+                                        f' {morph.parse("месяц")[0].make_agree_with_number(difference // 30).word}'
+        difference -= 30 * (difference // 30)
+    if difference:
+        resp += ', ' if resp else ' ' + f'{difference} {morph.parse("день")[0].make_agree_with_number(difference).word}'
+    return f'{resp}'

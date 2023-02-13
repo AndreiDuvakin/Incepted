@@ -49,6 +49,19 @@ def base():
         return redirect('/projects')
 
 
+@app.route('/project/<int:id_project>/task/new')
+def new_task_project(id_project):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
+        if current_project:
+            pass
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
 @app.route('/project/<int:id_project>/edit', methods=['GET', 'POST'])
 def edit_project(id_project):
     if current_user.is_authenticated:

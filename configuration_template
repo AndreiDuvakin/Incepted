@@ -1,0 +1,5 @@
+{
+"mail_login": "<mail>",
+"mail_password" : "<password>",
+"encrypt_key": "<key>"
+}

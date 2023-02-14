@@ -1,0 +1,124 @@
+.decision_page {
+    height: 90vw;
+    background-color: #dcb495;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.link_back_block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.link_back {
+    background-color: #ffffff;
+    color: #000000;
+    width: 15vw;
+    height: 4.5vw;
+    vertical-align: middle;
+    border-radius: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.link_back:hover {
+    text-decoration: none;
+    color: #000000;
+}
+.link_back_text {
+    font-size: 1.5vw;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.name_block {
+    margin-top: 3vw;
+    width: 90%;
+    height: 25vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.title_block {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+}
+.title_task {
+    text-align: center;
+    color: #000000;
+    font-size: 4vw;
+}
+.description_task {
+    width: 80%;
+    background-color: #EDCBB0;
+    height: auto;
+    max-height: 15vw;
+    border-radius: 2vw;
+    display: flex;
+    overflow-y: auto;
+}
+.description {
+    margin: 15px;
+}
+.description_text {
+    font-size: 1.5vw;
+    text-align: justify;
+}
+.data_block {
+    width: 90%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center
+}
+.bottom_data {
+    margin: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.form_label {
+    margin-top: 10px;
+    font-size: 1.3vw;
+    color: #000000;
+    font-weight: bold;
+}
+.input_data {
+    color: #000000;
+    border: 0.1vw solid #595008;
+    height: 4.5vw;
+    min-height: 4.5vw;
+    width: 30vw;
+    background-color: #dbc3af;
+    border-radius: 5vw;
+    font-size: 1.3vw;
+    display: inline-flex;
+    align-items: center;
+}
+.input_button {
+    width: 10vw;
+    height: 5vw;
+    border-radius: 5vw;
+    vertical-align: middle;
+}
+.text_data {
+    border-radius: 2vw !important;
+    width: 35vw;
+}
+.form_data {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+}
+.decision_block {
+    margin-top: 3vw;
+    width: 90%;
+    height: 25vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

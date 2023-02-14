@@ -1,8 +1,13 @@
 <link rel="stylesheet" href="../static/css/new_project.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="new_project_page">
+    <div class="link_back_block">
+        <a class="link_back" href="../">
+            <p class="link_back_text">К проектам</p>
+        </a>
+    </div>
     <div class="form_block">
-        <form action="" method="post" class="register_form" enctype="multipart/form-data">
+        <form action="" method="post" class="new_project_form" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="name_form_block">
                 <div class="form_data">

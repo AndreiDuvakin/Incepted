@@ -20,6 +20,7 @@ from forms.register import RegisterForm
 from forms.project import ProjectForm
 from forms.recovery import RecoveryForm, NewPasswordForm
 from forms.conf_delete_project import DeleteProjectForm
+from forms.task import NewTask, AnswerTask
 
 from data.users import User
 from data.quests import Quests
@@ -49,13 +50,47 @@ def base():
         return redirect('/projects')
 
 
-@app.route('/project/<int:id_project>/task/new')
+@app.route('/project/<int:id_project>/quest/<int:id_task>')
+def task_project(id_project, id_task):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
+        current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
+        if current_project and current_task and current_task.project == current_project.id:
+            form = AnswerTask()
+            return render_template('decision.html', title='Решение', project=current_project, task=current_task,
+                                   form=form)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
+@app.route('/project/<int:id_project>/task/new', methods=['GET', 'POST'])
 def new_task_project(id_project):
     if current_user.is_authenticated:
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
-            pass
+            form = NewTask()
+            if form.validate_on_submit():
+                if form.deadline_date.data and form.deadline_time.data:
+                    deadline = datetime.datetime.combine(form.deadline_date.data, form.deadline_time.data)
+                else:
+                    deadline = None
+                quest = Quests(
+                    project=current_project.id,
+                    creator=current_user.id,
+                    name=form.name.data if form.name.data else None,
+                    description=form.description.data if form.description.data else None,
+                    date_create=datetime.datetime.now(),
+                    deadline=deadline,
+                    realized=False
+                )
+                data_session.add(quest)
+                data_session.commit()
+                return redirect(f'/project/{str(current_project.id)}')
+            return render_template('new_task.html', title='Новая задача', form=form, porject=current_project)
         else:
             abort(404)
     else:

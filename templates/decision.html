@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="../../../static/css/decision.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="decision_page">
+    <div class="link_back_block">
+        <a class="link_back" href="../../../project/{{ project.id }}">
+            <p class="link_back_text">К проекту</p>
+        </a>
+    </div>
+    <div class="name_block">
+        <div class="title_block">
+            <h3 class="title_task">{{ task.name }}</h3>
+        </div>
+        <div class="description_task">
+            <div class="description">
+                <p class="description_text">{{ task.description }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="decision_block">
+        <form action="" method="post" class="answer_form" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="data_block">
+                <div class="form_data bottom_data">
+                    <label class="form_label">{{ form.text.label }}</label>
+                    {{ form.text(class="input_data label_data text_data", type="text", placeholder='your answer') }}
+                    {% for error in form.text.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form_data bottom_data">
+                    <label class="form_label">{{ form.file.label }}</label>
+                    {{ form.file(class="input_data padding_data", type="file") }}
+                    {% for error in form.file.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

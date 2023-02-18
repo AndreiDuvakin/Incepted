@@ -1,10 +1,13 @@
 import datetime
+import os
 import smtplib
 from json import loads
 from email.message import EmailMessage
 from data.roles import Roles
 from data.users import User
 from data.staff_projects import StaffProjects
+from data.answer import Answer
+from data.files import Files
 from data import db_session
 import uuid
 import pymorphy2
@@ -95,12 +98,14 @@ def save_project_logo(photo):
 
 
 def overdue_quest_project(quest):
-    if str(quest.deadline.date()) == str(datetime.datetime.now().date()):
+    if quest.deadline is None:
+        quest.overdue = ''
+    elif str(quest.deadline.date()) == str(datetime.datetime.now().date()):
         quest.overdue = 'today'
     elif quest.deadline < datetime.datetime.now():
         quest.overdue = 'yes'
         quest.time_left = 'Просрочено на' + round_date(quest.deadline)
-    else:
+    elif quest.deadline > datetime.datetime.now():
         quest.overdue = 'no'
         quest.time_left = 'Еще есть: ' + round_date(quest.deadline)
     return quest
@@ -120,3 +125,31 @@ def round_date(date_time):
     if difference:
         resp += ', ' if resp else ' ' + f'{difference} {morph.parse("день")[0].make_agree_with_number(difference).word}'
     return f'{resp}'
+
+
+def save_proof_quest(project, file, user_id):
+    data_session = db_session.create_session()
+    path = f'static/app_files/all_projects/{str(project.id)}/{str(file.filename)}'
+    file_check = data_session.query(Files).filter(Files.path == path).first()
+    file.save(path)
+    if file_check:
+        return file_check.id
+    file = Files(
+        path=path,
+        user=user_id,
+        up_date=datetime.datetime.now()
+    )
+    data_session.add(file)
+    data_session.flush()
+    data_session.refresh(file)
+    file_id = file.id
+    data_session.commit()
+    data_session.close()
+    return file_id
+
+
+def find_files_answer(file_id):
+    data_session = db_session.create_session()
+    file = data_session.query(Files).filter(Files.id == file_id).first()
+    return {'id': file.id, 'path': file.path, 'user': file.user, 'up_date': file.up_date,
+            'current_path': file.path[str(file.path).find('all_projects') + 13:].split('/')}

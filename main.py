@@ -12,7 +12,7 @@ from sqlalchemy import or_
 from json import loads
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
-    overdue_quest_project
+    overdue_quest_project, save_proof_quest, find_files_answer
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
@@ -24,6 +24,8 @@ from forms.task import NewTask, AnswerTask
 
 from data.users import User
 from data.quests import Quests
+from data.answer import Answer
+from data.proof_file import FileProof
 from data.files import Files
 from data.projects import Projects
 from data.staff_projects import StaffProjects
@@ -50,7 +52,35 @@ def base():
         return redirect('/projects')
 
 
-@app.route('/project/<int:id_project>/quest/<int:id_task>')
+@app.route('/project/<int:id_project>/file/<int:id_file>/delete')
+def delete_file(id_project, id_file):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
+        current_file = data_session.query(Files).filter(Files.id == id_file).first()
+        if current_project and current_file:
+            if current_user.id in map(lambda x: x[0], data_session.query(StaffProjects.user).filter(
+                    StaffProjects.project == current_project.id).all()) or current_user.id == current_project.creator:
+                current_proof = data_session.query(FileProof).filter(FileProof.file == id_file).all()
+                os.remove(current_file.path)
+                data_session.delete(current_file)
+                if current_proof:
+                    quest = data_session.query(Answer.quest).filter(Answer.id == current_proof[0].answer).first()
+                    for i in current_proof:
+                        data_session.delete(i)
+                    data_session.commit()
+                    return redirect(f'/project/{current_project.id}/quest/{quest[0]}')
+                data_session.commit()
+                return redirect(f'/project/{current_project.id}')
+            else:
+                abort(403)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
+@app.route('/project/<int:id_project>/quest/<int:id_task>', methods=['GET', 'POST'])
 def task_project(id_project, id_task):
     if current_user.is_authenticated:
         data_session = db_session.create_session()
@@ -58,15 +88,75 @@ def task_project(id_project, id_task):
         current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
         if current_project and current_task and current_task.project == current_project.id:
             form = AnswerTask()
-            return render_template('decision.html', title='Решение', project=current_project, task=current_task,
-                                   form=form)
+            current_answer = data_session.query(Answer).filter(Answer.quest == current_task.id).first()
+            list_files = None
+            if form.validate_on_submit():
+                if form.deadline_date.data and form.deadline_time.data:
+                    deadline = datetime.datetime.combine(form.deadline_date.data, form.deadline_time.data)
+                else:
+                    deadline = None
+                current_task.deadline = deadline
+                if current_answer:
+                    current_answer.text = form.text.data if form.text.data else None
+                    current_answer.date_edit = datetime.datetime.now()
+                    current_task.realized = form.realized.data
+                    data_session.commit()
+                    if form.file.data[0].filename:
+                        files = list(
+                            map(lambda x: save_proof_quest(current_project, x, current_user.id), form.file.data))
+                        for i in files:
+                            if not data_session.query(FileProof).filter(FileProof.answer == current_answer.id,
+                                                                        FileProof.file == i).first():
+                                proof_file = FileProof(
+                                    answer=current_answer.id,
+                                    file=i
+                                )
+                                data_session.add(proof_file)
+                                data_session.commit()
+                else:
+                    if form.file.data[0].filename:
+                        files = list(
+                            map(lambda x: save_proof_quest(current_project, x, current_user.id), form.file.data))
+                    else:
+                        files = False
+                    current_task.realized = form.realized.data
+                    current_answer = Answer(
+                        quest=current_task.id,
+                        text=form.text.data if form.text.data else None,
+                        creator=current_user.id,
+                        date_create=datetime.datetime.now(),
+                        date_edit=datetime.datetime.now()
+                    )
+                    data_session.add(current_answer)
+                    data_session.flush()
+                    data_session.refresh(current_answer)
+                    if files:
+                        for i in files:
+                            proof_file = FileProof(
+                                proof=current_answer.id,
+                                file=i
+                            )
+                            data_session.add(proof_file)
+                    data_session.commit()
+                return redirect(f'/project/{current_project.id}')
+            if current_answer:
+                form.text.data = current_answer.text
+                form.realized.data = current_task.realized
+                files = data_session.query(FileProof).filter(FileProof.answer == current_answer.id).all()
+                if files:
+                    list_files = list(map(lambda x: find_files_answer(x.file), files))
+            if current_task.deadline and current_task.deadline:
+                form.deadline_date.data = current_task.deadline.date()
+                form.deadline_time.data = current_task.deadline.time()
+            return render_template('answer.html', title='Решение', project=current_project, task=current_task,
+                                   form=form, list_files=list_files)
         else:
             abort(404)
     else:
         return redirect('/login')
 
 
-@app.route('/project/<int:id_project>/task/new', methods=['GET', 'POST'])
+@app.route('/project/<int:id_project>/quest/new', methods=['GET', 'POST'])
 def new_task_project(id_project):
     if current_user.is_authenticated:
         data_session = db_session.create_session()
@@ -166,7 +256,11 @@ def project(id_project):
                     User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
                 quests = data_session.query(Quests).filter(Quests.project == current_project.id).all()
                 if quests:
-                    quests.sort(key=lambda x: (x.realized, x.deadline))
+                    quests_sort = sorted(list(filter(lambda x: x.deadline is not None, quests)),
+                                         key=lambda x: (x.realized, x.deadline))
+                    quests = list(filter(lambda x: x.realized == 0, quests_sort)) + list(
+                        filter(lambda x: x.deadline is None, quests)) + list(
+                        filter(lambda x: x.realized == 1, quests_sort))
                     quests = list(map(lambda x: overdue_quest_project(x), quests))
                 return render_template('project.html',
                                        project=current_project,

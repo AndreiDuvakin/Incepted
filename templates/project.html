@@ -72,6 +72,10 @@
                                     <div class="deadline_block alert alert-success" role="alert">
                                         {{ quest.time_left }}
                                     </div>
+                                    {% elif quest.overdue == '' and quest.realized != 1 %}
+                                    <div class="deadline_block alert alert-warning" role="alert">
+                                        Дедлайна нет
+                                    </div>
                                     {% else %}
                                     <div class="deadline_block alert alert-success" role="alert">
                                         Задача выполнена
@@ -92,14 +96,25 @@
                                             </div>
                                         </div>
                                         <div class="quest_solve_button">
-                                            <a class="quest_solve_link" id="quest_solve_link">
-                                                <p id="quest_solve_link_id" class="{{ quest.id }}"></p>
+                                            <a class="quest_solve_link" href="{{ project.id }}/quest/{{ quest.id }}">
                                                 <p class="quest_solve_text">Решить</p>
                                             </a>
                                         </div>
                                     </div>
                                     {% else %}
-
+                                    <div class="quest_body">
+                                        <div class="quest_description_block">
+                                            <p class="quest_description_title">Описание</p>
+                                            <div class="quest_description">
+                                                <p class="quest_description_text">{{ quest.description }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="quest_solve_button">
+                                            <a class="quest_solve_link" href="{{ project.id }}/quest/{{ quest.id }}">
+                                                <p class="quest_solve_text">Посмотреть</p>
+                                            </a>
+                                        </div>
+                                    </div>
                                     {% endif %}
                                 </div>
                             </div>

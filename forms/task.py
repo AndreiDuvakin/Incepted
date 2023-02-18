@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, DateField, TimeField, FileField
+from wtforms import StringField, SubmitField, TextAreaField, DateField, TimeField, MultipleFileField, \
+    BooleanField
 from wtforms.validators import DataRequired
 
 
@@ -13,5 +14,8 @@ class NewTask(FlaskForm):
 
 class AnswerTask(FlaskForm):
     text = TextAreaField('Письменный ответ')
-    file = FileField('Файловый ответ')
-    submit = SubmitField('Ответить')
+    file = MultipleFileField('Файловый ответ')
+    realized = BooleanField('Задача решена')
+    deadline_date = DateField('Дедлайн', validators=[DataRequired()])
+    deadline_time = TimeField('', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')

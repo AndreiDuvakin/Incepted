@@ -5,4 +5,10 @@ quest_solve_link_id = document.getElementById("quest_solve_link_id");
 
 edit_button.href = String(window.location.href) + '/edit';
 new_task_link.href = String(window.location.href) + '/quest/new';
-quest_solve_link.href = String(window.location.href) + '/quest/' + quest_solve_link_id.className;
+
+function push_file()
+{
+    document.getElementById('selectedFile').click();
+    document.getElementById('upload_button').style = 'display: block;';
+    document.getElementById('select_file_button').style = 'display: none;';
+}

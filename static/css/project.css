@@ -83,6 +83,7 @@
     margin-top: 10px;
     overflow-x: auto;
     color: #000000 !important;
+    font-size: 1.5vw;
 }
 .link_to_user {
     width: 26vw;
@@ -122,7 +123,7 @@
     flex-direction: column;
     align-items: center;
 }
-.task_block {
+.task_block, .list_files_block {
     background-color: #EDCBB0;
     width: 95%;
     height: 25vw;
@@ -201,8 +202,8 @@
 }
 .deadline_block {
     border-radius: 5vw !important;
-    width: 15vw;
-    height: 70%;
+    width: 15vw !important;
+    height: 3vw !important;
     margin-top: 2%;
     font-size: 1vw;
     display: flex;
@@ -306,4 +307,63 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.files_block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    height: 50vw;
+}
+.list_files {
+    margin: 2vw;
+}
+.files_title {
+    text-align: center;
+    color: #000000;
+    font-size: 4vw;
+}
+.file {
+    width: 98%;
+    display: flex;
+    background-color: #9E795A;
+    margin: 0.5vw;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 4.5vw;
+    border-radius: 2vw;
+}
+.file_head {
+    width: 30vw;
+    margin-left: 1vw;
+    height: 4vw;
+    background-color: #9E795A !important;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+.file_head_path, .file_path {
+    font-size: 1.5vw;
+    color: #ffffff !important;
+    font-weight: bold;
+    height: 3vw;
+    display: flex;
+    align-items: flex-start;
+    background-color: #9E795A !important;
+}
+.file_buttons {
+    margin-right: 2vw; 
+}
+.file_delete, .file_download, .upload_button {
+    border-radius: 1vw !important;
+    margin: 1vw;
+    width: 8vw;
+    height: 3vw;
+}
+.file_delete {
+    background-color: hsla(0, 100%, 62%, 0.785) !important;
+    border-color: hsla(0, 100%, 62%, 0.785) !important;
+}
+.button_text {
+    font-size: 1.3vw;
 }

@@ -12,12 +12,12 @@ from sqlalchemy import or_
 from json import loads
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
-    overdue_quest_project, save_proof_quest, find_files_answer
+    overdue_quest_project, save_proof_quest, find_files_answer, file_tree
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
 from forms.register import RegisterForm
-from forms.project import ProjectForm
+from forms.project import ProjectForm, AddFileProject
 from forms.recovery import RecoveryForm, NewPasswordForm
 from forms.conf_delete_project import DeleteProjectForm
 from forms.task import NewTask, AnswerTask
@@ -55,6 +55,7 @@ def base():
 @app.route('/project/<int:id_project>/file/<int:id_file>/delete')
 def delete_file(id_project, id_file):
     if current_user.is_authenticated:
+        from_path = request.args.get('from') if request.args.get('from') else ''
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         current_file = data_session.query(Files).filter(Files.id == id_file).first()
@@ -69,6 +70,8 @@ def delete_file(id_project, id_file):
                     for i in current_proof:
                         data_session.delete(i)
                     data_session.commit()
+                    if from_path == 'project':
+                        return redirect(f'/project/{current_project.id}')
                     return redirect(f'/project/{current_project.id}/quest/{quest[0]}')
                 data_session.commit()
                 return redirect(f'/project/{current_project.id}')
@@ -244,7 +247,7 @@ def edit_project(id_project):
         return redirect('/login')
 
 
-@app.route('/project/<int:id_project>')
+@app.route('/project/<int:id_project>', methods=['POST', 'GET'])
 def project(id_project):
     if current_user.is_authenticated:
         data_session = db_session.create_session()
@@ -262,11 +265,19 @@ def project(id_project):
                         filter(lambda x: x.deadline is None, quests)) + list(
                         filter(lambda x: x.realized == 1, quests_sort))
                     quests = list(map(lambda x: overdue_quest_project(x), quests))
+                files_list = file_tree(f'static/app_files/all_projects/{current_project.id}')
+                form_file = AddFileProject()
+                if form_file.validate_on_submit():
+                    if form_file.file.data[0].filename:
+                        files = list(
+                            map(lambda x: save_proof_quest(current_project, x, current_user.id), form_file.file.data))
                 return render_template('project.html',
                                        project=current_project,
                                        title=current_project.name,
                                        staff=staff,
-                                       quests=quests)
+                                       quests=quests,
+                                       file_tree=files_list,
+                                       form_file=form_file)
             else:
                 abort(403)
         else:

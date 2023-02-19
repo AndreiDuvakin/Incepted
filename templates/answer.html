@@ -33,7 +33,7 @@
                         </div>
                         <div class="file_buttons">
                             <div class="btn-group file_buttons_groud">
-                                {% if current_user.id == project.creator or task.creator == current_user.id or file.user == current_user.id %}
+                                {% if current_user.id == project.creator or task.creator == current_user.id or file['user'] == current_user.id %}
                                 <a href="../file/{{ file.id }}/delete" class="btn btn-primary file_delete"><p class="button_text">Удалить</p></a>
                                 {% endif %}
                                 <a href="../../../{{ file['path'] }}" download="" class="btn btn-primary file_download"><p class="button_text">Скачать</p></a>

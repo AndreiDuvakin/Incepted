@@ -6,7 +6,6 @@ from email.message import EmailMessage
 from data.roles import Roles
 from data.users import User
 from data.staff_projects import StaffProjects
-from data.answer import Answer
 from data.files import Files
 from data import db_session
 import uuid
@@ -153,3 +152,33 @@ def find_files_answer(file_id):
     file = data_session.query(Files).filter(Files.id == file_id).first()
     return {'id': file.id, 'path': file.path, 'user': file.user, 'up_date': file.up_date,
             'current_path': file.path[str(file.path).find('all_projects') + 13:].split('/')}
+
+
+def file_tree(path):
+    tree = []
+    data_session = db_session.create_session()
+    h = 1
+    for i in os.listdir(path):
+        if os.path.isfile(f'{path}/{i}'):
+            file = data_session.query(Files).filter(Files.path == f'{path}/{i}').first()
+            tree.append(
+                {
+                    'path': f'{path}/{i}',
+                    'type': 'file',
+                    'object': file if file else None,
+                    'current_path': f'{path}/{i}'[str(file.path).find('all_projects') + 13:].split('/')
+                }
+            )
+        else:
+            tree.append(
+                {
+                    'id': h,
+                    'name': i,
+                    'path': f'{path}/{i}',
+                    'type': 'folder',
+                    'tree': file_tree(f'{path}/{i}')
+                }
+            )
+            h += 1
+    data_session.close()
+    return tree

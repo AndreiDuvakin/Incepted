@@ -126,7 +126,54 @@
         </div>
     </div>
     <div class="files_block">
+        <div class="head_files">
+            <h2 class="files_title">Файлы</h2>
+            <form action="" method="post" class="file_form" id="file_form" enctype="multipart/form-data">
+                {{ form_file.hidden_tag() }}
+                <div class="form_data bottom_data">
+                    {{ form_file.file(class="input_data", id="selectedFile", type="file", style="display: none;") }}
+                    {% for error in form_file.file.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {{ form_file.submit(type="submit", id="upload_button", class="btn btn-success upload_button",
+                style="display: none;") }}
+                <button type="button" class="upload_button btn btn-primary" id="select_file_button"
+                        onclick="push_file()">Добавить
+                </button>
+            </form>
+        </div>
+        <div class="list_files_block">
+            <div class="list_files">
+                {% for item in file_tree %}
+                {% if item['type'] == 'file' %}
+                <div class="file">
+                    <div class="file_head">
+                        <nav class="file_head_group" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb file_head_path">
+                                {% for path in item['current_path'] %}
+                                <li class="breadcrumb-item active file_path" aria-current="page">{{ path }}</li>
+                                {% endfor %}
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="file_buttons">
+                        <div class="btn-group file_buttons_groud">
+                            {% if current_user.id == project.creator or item['object'].user == current_user.id %}
+                            <a href="../project/{{ project.id }}/file/{{ item['object'].id }}/delete?from=project"
+                               class="btn btn-primary file_delete"><p class="button_text">Удалить</p></a>
+                            {% endif %}
+                            <a href="../../../{{ item['path'] }}" download="" class="btn btn-primary file_download"><p
+                                    class="button_text">Скачать</p></a>
+                        </div>
+                    </div>
+                </div>
+                {% elif item['type'] == 'folder' %}
 
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="../static/js/project.js"></script>

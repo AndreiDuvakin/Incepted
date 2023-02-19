@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, FileField
+from wtforms import StringField, SubmitField, TextAreaField, FileField, MultipleFileField
 from wtforms.validators import DataRequired
 
 
@@ -10,3 +10,8 @@ class ProjectForm(FlaskForm):
     submit = SubmitField('Создать')
     del_photo = SubmitField('Удалить фотографию')
     save = SubmitField('Сохранить')
+
+
+class AddFileProject(FlaskForm):
+    file = MultipleFileField()
+    submit = SubmitField('Сохранить')

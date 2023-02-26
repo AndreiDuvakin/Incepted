@@ -1,5 +1,7 @@
 import datetime
 import os
+import logging
+import shutil
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
@@ -12,7 +14,7 @@ from sqlalchemy import or_
 from json import loads
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
-    overdue_quest_project, save_proof_quest, find_files_answer, file_tree
+    overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
@@ -38,6 +40,8 @@ with open('incepted.config', 'r', encoding='utf-8') as file:
     file = loads(file)
 key = file["encrypt_key"]
 app.config['SECRET_KEY'] = key
+logging.basicConfig(level=logging.INFO, filename="logfiles/main.log", format="%(asctime)s %(levelname)s %(message)s",
+                    encoding='utf-8')
 csrf = CSRFProtect(app)
 s = URLSafeTimedSerializer(key)
 login_manager = LoginManager()
@@ -100,7 +104,7 @@ def task_project(id_project, id_task):
                     deadline = None
                 current_task.deadline = deadline
                 if current_answer:
-                    current_answer.text = form.text.data if form.text.data else None
+                    current_answer.text = form.text.data
                     current_answer.date_edit = datetime.datetime.now()
                     current_task.realized = form.realized.data
                     data_session.commit()
@@ -125,7 +129,7 @@ def task_project(id_project, id_task):
                     current_task.realized = form.realized.data
                     current_answer = Answer(
                         quest=current_task.id,
-                        text=form.text.data if form.text.data else None,
+                        text=form.text.data,
                         creator=current_user.id,
                         date_create=datetime.datetime.now(),
                         date_edit=datetime.datetime.now()
@@ -136,19 +140,19 @@ def task_project(id_project, id_task):
                     if files:
                         for i in files:
                             proof_file = FileProof(
-                                proof=current_answer.id,
+                                answer=current_answer.id,
                                 file=i
                             )
                             data_session.add(proof_file)
                     data_session.commit()
                 return redirect(f'/project/{current_project.id}')
-            if current_answer:
+            if current_answer and request.method == 'GET':
                 form.text.data = current_answer.text
                 form.realized.data = current_task.realized
                 files = data_session.query(FileProof).filter(FileProof.answer == current_answer.id).all()
                 if files:
                     list_files = list(map(lambda x: find_files_answer(x.file), files))
-            if current_task.deadline and current_task.deadline:
+            if current_task.deadline and current_task.deadline and request.method == 'GET':
                 form.deadline_date.data = current_task.deadline.date()
                 form.deadline_time.data = current_task.deadline.time()
             return render_template('answer.html', title='Решение', project=current_project, task=current_task,
@@ -271,6 +275,7 @@ def project(id_project):
                     if form_file.file.data[0].filename:
                         files = list(
                             map(lambda x: save_proof_quest(current_project, x, current_user.id), form_file.file.data))
+                    return redirect(f'/project/{str(current_project.id)}')
                 return render_template('project.html',
                                        project=current_project,
                                        title=current_project.name,
@@ -338,18 +343,11 @@ def delete_project(id_project):
             if project_del.creator == current_user.id:
                 form = DeleteProjectForm()
                 if form.validate_on_submit():
-                    if form.conf.data != f'delete/{project_del.name}':
+                    if str(form.conf.data).lower().strip() != f'delete/{str(project_del.name)}'.lower().strip():
                         return render_template('delete_project.html', title='Удаление проекта', form=form,
                                                project=project_del,
                                                message='Вы не правильно ввели фразу')
-                    staff = data_session.query(StaffProjects).filter(StaffProjects.project == id_project).all()
-                    for i in staff:
-                        data_session.delete(i)
-                    if 'none_project' not in project_del.photo:
-                        os.remove(project_del.photo)
-                    shutil.rmtree(f'static/app_files/all_projects/{str(project_del.id)}')
-                    data_session.delete(project_del)
-                    data_session.commit()
+                    delete_project_data(project_del, data_session)
                     return redirect('/projects')
                 return render_template('delete_project.html', title='Удаление проекта', form=form, project=project_del,
                                        message='')
@@ -512,6 +510,7 @@ def login():
             if user and user.check_password(form.password.data):
                 if user.activated:
                     login_user(user, remember=form.remember_me.data)
+                    logging.info(f'{user.login} logged in')
                     return redirect('/projects')
                 else:
                     return render_template('login.html',
@@ -531,6 +530,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    logging.info(f'{current_user.login} logged out')
     logout_user()
     return redirect("/")
 
@@ -565,6 +565,7 @@ def register():
             link_conf = url_for('confirmation', token=token, _external=True)
             mail(f'Для завершения регистрации пройдите по ссылке: {link_conf}', form.email.data,
                  'Подтверждение регистрации')
+            logging.info(f'{form.login.data} was registered')
             return redirect('/login?message=Мы выслали ссылку для подтверждения почты')
         return render_template('register.html', form=form, message='', title='Регистрация')
     else:
@@ -580,6 +581,7 @@ def confirmation(token):
         if user:
             user.activated = True
             data_session.commit()
+            logging.info(f'{user.login} has been confirmed')
             return redirect('/login?message=Почта успешно подтверждена')
         else:
             return redirect('/login?message=Пользователь не найден&danger=True')
@@ -614,8 +616,11 @@ def main():
     db_session.global_init(db_path)
     if not db:
         init_db_default()
-    serve(app, host='0.0.0.0', port=5000)
+    serve(app, host='0.0.0.0', port=5000, threads=10)
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as error:
+        logging.warning(f'{error}')

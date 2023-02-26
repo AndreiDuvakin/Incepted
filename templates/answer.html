@@ -33,10 +33,13 @@
                         </div>
                         <div class="file_buttons">
                             <div class="btn-group file_buttons_groud">
-                                {% if current_user.id == project.creator or task.creator == current_user.id or file['user'] == current_user.id %}
-                                <a href="../file/{{ file.id }}/delete" class="btn btn-primary file_delete"><p class="button_text">Удалить</p></a>
+                                {% if current_user.id == project.creator or task.creator == current_user.id or
+                                file['user'] == current_user.id %}
+                                <a href="../file/{{ file.id }}/delete" class="btn btn-primary file_delete"><p
+                                        class="button_text">Удалить</p></a>
                                 {% endif %}
-                                <a href="../../../{{ file['path'] }}" download="" class="btn btn-primary file_download"><p class="button_text">Скачать</p></a>
+                                <a href="../../../{{ file['path'] }}" download="" class="btn btn-primary file_download">
+                                    <p class="button_text">Скачать</p></a>
                             </div>
                         </div>
                     </div>
@@ -45,17 +48,17 @@
             </div>
         </div>
         {% endif %}
-        <div class="form_data bottom_data form_text_one">
-            <label class="form_label">{{ form.text.label }}</label>
-            {{ form.text(class="input_data text_data", type="text", id="text_data", placeholder='your answer') }}
-            {% for error in form.text.errors %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endfor %}
-        </div>
     </div>
     <div class="decision_block">
         <form action="" method="post" class="answer_form" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
+            <div class="form_data bottom_data form_text_one">
+                <label class="form_label">{{ form.text.label }}</label>
+                {{ form.text(class="input_data text_data", type="text", id="text_data", placeholder='your answer') }}
+                {% for error in form.text.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endfor %}
+            </div>
             <div class="data_block">
                 <div class="form_data bottom_data">
                     <label class="form_label">{{ form.file.label }}</label>

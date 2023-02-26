@@ -1,8 +1,14 @@
 import datetime
 import os
+import shutil
 import smtplib
 from json import loads
 from email.message import EmailMessage
+from sqlalchemy import or_
+
+from data.answer import Answer
+from data.proof_file import FileProof
+from data.quests import Quests
 from data.roles import Roles
 from data.users import User
 from data.staff_projects import StaffProjects
@@ -27,8 +33,8 @@ def check_password(password=''):
 
 
 def mail(msg, to, topic='Подтверждение почты'):
-    with open('incepted.config', 'r', encoding='utf-8').read() as file:
-        file = loads(file)
+    with open('incepted.config', 'r', encoding='utf-8') as file:
+        file = loads(file.read())
     login, password = file["mail_login"], file["mail_password"]
     email_server = "smtp.yandex.ru"
     sender = "incepted@yandex.ru"
@@ -182,3 +188,35 @@ def file_tree(path):
             h += 1
     data_session.close()
     return tree
+
+
+def delete_file_proof_data(file_proof, data_session):
+    file = data_session.query(Files).filter(Files.id == file_proof.file).first()
+    data_session.delete(file)
+
+
+def delete_answer_data(answer, data_session):
+    file_proofs = data_session.query(FileProof).filter(FileProof.answer == answer.id).all()
+    list(map(lambda file: delete_file_proof_data(file, data_session), file_proofs))
+    list(map(data_session.delete, file_proofs))
+
+
+def delete_quest_data(quest, data_session):
+    answers = data_session.query(Answer).filter(Answer.quest == quest.id).all()
+    list(map(lambda answer: delete_answer_data(answer, data_session), answers))
+    list(map(data_session.delete, answers))
+
+
+def delete_project_data(project, data_session):
+    staff = data_session.query(StaffProjects).filter(StaffProjects.project == project.id).all()
+    list(map(data_session.delete, staff))
+    if 'none_project' not in project.photo:
+        os.remove(project.photo)
+    quests = data_session.query(Quests).filter(Quests.project == project.id).all()
+    list(map(lambda quest: delete_quest_data(quest, data_session), quests))
+    list(map(data_session.delete, quests))
+    list(map(data_session.delete,
+             data_session.query(Files).filter(Files.path.contains(f'all_projects/{str(project.id)}/')).all()))
+    shutil.rmtree(f'static/app_files/all_projects/{str(project.id)}')
+    data_session.delete(project)
+    data_session.commit()

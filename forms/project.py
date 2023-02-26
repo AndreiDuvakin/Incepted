@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed
 from wtforms import StringField, SubmitField, TextAreaField, FileField, MultipleFileField
 from wtforms.validators import DataRequired
 
@@ -6,7 +7,7 @@ from wtforms.validators import DataRequired
 class ProjectForm(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     description = TextAreaField('Описание')
-    logo = FileField('Логотип')
+    logo = FileField('Логотип', validators=[FileAllowed(['jpg', 'png', 'bmp', 'ico', 'jpeg'], 'Только изображения')])
     submit = SubmitField('Создать')
     del_photo = SubmitField('Удалить фотографию')
     save = SubmitField('Сохранить')

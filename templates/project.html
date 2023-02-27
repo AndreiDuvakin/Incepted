@@ -8,9 +8,13 @@
     </div>
     <div class="project_header">
         <div class="edit_block">
+            {% if current_user.id == project.creator %}
             <a id="edit_button" class="edit_button" href="">
                 <img class="edit_button_image" src="../static/images/pen_b.png">
             </a>
+            {% else %}
+            <p class="edit_button"> </p>
+            {% endif %}
         </div>
         <div class="brand_block">
             <img class="project_logo" src="../{{project.photo}}"/>

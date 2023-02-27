@@ -6,6 +6,7 @@ body {
     min-height: 100%;
 }
 .navbar {
+    margin-top: -1.1vw;
     background-color: #dcb495;
     display: inline-flex;
     height: 8vw;

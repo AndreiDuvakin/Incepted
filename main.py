@@ -97,11 +97,11 @@ def task_project(id_project, id_task):
             form = AnswerTask()
             current_answer = data_session.query(Answer).filter(Answer.quest == current_task.id).first()
             list_files = None
-            if form.validate_on_submit():
+            if form.submit.data and request.method == 'POST':
                 if form.deadline_date.data and form.deadline_time.data:
                     deadline = datetime.datetime.combine(form.deadline_date.data, form.deadline_time.data)
                 else:
-                    deadline = None
+                    deadline = current_task.deadline
                 current_task.deadline = deadline
                 if current_answer:
                     current_answer.text = form.text.data
@@ -201,7 +201,7 @@ def edit_project(id_project):
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
-            if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
+            if current_user.id == current_project.creator:
                 list_users = list(
                     map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
                 staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(

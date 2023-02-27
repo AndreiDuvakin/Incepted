@@ -2,6 +2,7 @@
     display: none !important;
 }
 .page_error {
+    margin-top: -1.4vw;
     height: 55vw;
     background-color: #dcb495;
     display: flex;

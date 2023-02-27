@@ -6,6 +6,7 @@ main, html {
     margin-bottom: 60%;
 }
 .header_block {
+    margin-top: -1.1vw;
     width: 100%;
     height: 75vw;
     background-position: center;

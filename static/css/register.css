@@ -2,6 +2,7 @@
     display: none;
 }
 .register_page {
+    margin-top: -1.1vw;
     display: flex;
     justify-content: center;
     align-items: center;

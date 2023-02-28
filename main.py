@@ -84,7 +84,7 @@ def edit_quest(id_project, id_task):
                 current_task.description = form.description.data if form.description.data else None
                 current_task.deadline = deadline
                 data_session.commit()
-                return redirect(f'/project/{str(current_project.id)}')
+                return redirect(f'/project/{str(current_project.id)}/quest/{str(current_task.id)}')
             return render_template('edit_task.html', title='Редактирование задачи', form=form, porject=current_project,
                                    task=current_task)
         else:

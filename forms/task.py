@@ -4,18 +4,18 @@ from wtforms import StringField, SubmitField, TextAreaField, DateField, TimeFiel
 from wtforms.validators import DataRequired
 
 
-class NewTask(FlaskForm):
+class Task(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     description = TextAreaField('Описание', validators=[DataRequired()])
     deadline_date = DateField('Дедлайн', validators=[DataRequired()])
     deadline_time = TimeField('', validators=[DataRequired()])
     submit = SubmitField('Создать')
+    save = SubmitField('Сохранить')
+    delete = SubmitField('Удалить')
 
 
 class AnswerTask(FlaskForm):
     text = TextAreaField('Письменный ответ')
-    file = MultipleFileField('Файловый ответ')
+    file = MultipleFileField('Добавить файлы')
     realized = BooleanField('Задача решена')
-    deadline_date = DateField('Дедлайн', validators=[DataRequired()])
-    deadline_time = TimeField('', validators=[DataRequired()])
     submit = SubmitField('Сохранить')

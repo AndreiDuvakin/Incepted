@@ -12,6 +12,7 @@ body {
     height: 8vw;
 }
 #navbar {
+    margin-top: -80px;
     position: fixed;
     width: 100%;
     transition: top 0.3s;

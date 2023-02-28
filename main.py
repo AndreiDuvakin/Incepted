@@ -14,7 +14,7 @@ from sqlalchemy import or_
 from json import loads
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
-    overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data
+    overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data, delete_quest_data
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
@@ -22,7 +22,7 @@ from forms.register import RegisterForm
 from forms.project import ProjectForm, AddFileProject
 from forms.recovery import RecoveryForm, NewPasswordForm
 from forms.conf_delete_project import DeleteProjectForm
-from forms.task import NewTask, AnswerTask
+from forms.task import Task, AnswerTask
 
 from data.users import User
 from data.quests import Quests
@@ -54,6 +54,43 @@ def base():
         return render_template('main.html', title='Главная')
     else:
         return redirect('/projects')
+
+
+@app.route('/project/<int:id_project>/quest/<int:id_task>/edit', methods=['GET', 'POST'])
+def edit_quest(id_project, id_task):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
+        current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
+        if current_project and current_task and current_task.project == current_project.id and (
+                current_task.creator == current_user.id or current_project.creator == current_user.id):
+            form = Task()
+            if request.method == 'GET':
+                form.name.data = current_task.name
+                form.description.data = current_task.description
+                form.deadline_time.data = current_task.deadline.time()
+                form.deadline_date.data = current_task.deadline.date()
+            if form.delete.data:
+                delete_quest_data(current_task, data_session)
+                data_session.delete(current_task)
+                data_session.commit()
+                return redirect(f'/project/{str(current_project.id)}')
+            if form.validate_on_submit():
+                if form.deadline_date.data and form.deadline_time.data:
+                    deadline = datetime.datetime.combine(form.deadline_date.data, form.deadline_time.data)
+                else:
+                    deadline = None
+                current_task.name = form.name.data if form.name.data else None
+                current_task.description = form.description.data if form.description.data else None
+                current_task.deadline = deadline
+                data_session.commit()
+                return redirect(f'/project/{str(current_project.id)}')
+            return render_template('edit_task.html', title='Редактирование задачи', form=form, porject=current_project,
+                                   task=current_task)
+        else:
+            abort(403)
+    else:
+        return redirect('/login')
 
 
 @app.route('/project/<int:id_project>/file/<int:id_file>/delete')
@@ -98,11 +135,6 @@ def task_project(id_project, id_task):
             current_answer = data_session.query(Answer).filter(Answer.quest == current_task.id).first()
             list_files = None
             if form.submit.data and request.method == 'POST':
-                if form.deadline_date.data and form.deadline_time.data:
-                    deadline = datetime.datetime.combine(form.deadline_date.data, form.deadline_time.data)
-                else:
-                    deadline = current_task.deadline
-                current_task.deadline = deadline
                 if current_answer:
                     current_answer.text = form.text.data
                     current_answer.date_edit = datetime.datetime.now()
@@ -152,9 +184,6 @@ def task_project(id_project, id_task):
                 files = data_session.query(FileProof).filter(FileProof.answer == current_answer.id).all()
                 if files:
                     list_files = list(map(lambda x: find_files_answer(x.file), files))
-            if current_task.deadline and current_task.deadline and request.method == 'GET':
-                form.deadline_date.data = current_task.deadline.date()
-                form.deadline_time.data = current_task.deadline.time()
             return render_template('answer.html', title='Решение', project=current_project, task=current_task,
                                    form=form, list_files=list_files)
         else:
@@ -169,7 +198,7 @@ def new_task_project(id_project):
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
-            form = NewTask()
+            form = Task()
             if form.validate_on_submit():
                 if form.deadline_date.data and form.deadline_time.data:
                     deadline = datetime.datetime.combine(form.deadline_date.data, form.deadline_time.data)
@@ -386,28 +415,28 @@ def new_project():
         list_users = list(
             map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
         if form.validate_on_submit():
-            currnet_project = Projects(
+            current_project = Projects(
                 name=form.name.data,
                 description=form.description.data,
                 date_create=datetime.datetime.now(),
                 creator=current_user.id
             )
-            currnet_project.photo = save_project_logo(
+            current_project.photo = save_project_logo(
                 form.logo.data) if form.logo.data else 'static/images/none_project.png'
-            data_session.add(currnet_project)
+            data_session.add(current_project)
             data_session.flush()
-            data_session.refresh(currnet_project)
+            data_session.refresh(current_project)
             for i in list_users:
                 if request.form.getlist(f"choose_{i['login']}") and i['id'] != current_user.id:
                     new_staffer = StaffProjects(
                         user=i['id'],
-                        project=currnet_project.id,
+                        project=current_project.id,
                         role='user',
                         permission=3
                     )
                     data_session.add(new_staffer)
             data_session.commit()
-            os.mkdir(f'static/app_files/all_projects/{str(currnet_project.id)}')
+            os.mkdir(f'static/app_files/all_projects/{str(current_project.id)}')
             return redirect('/projects')
         return render_template('new_project.html', title='Новый проект', form=form, list_users=list_users)
     else:

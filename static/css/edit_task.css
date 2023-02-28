@@ -13,6 +13,7 @@
     justify-content: center;
 }
 .form_data_button {
+    margin-top: 2.5vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,7 +40,7 @@
 .description {
     border-radius: 2vw !important;
     width: 50vw;
-    max-height: 10vw;
+    max-height: 10vw !important;
 }
 .name_form_block {
     width: 100%;
@@ -51,7 +52,7 @@
     width: 20vw;
 }
 .quest_button {
-    margin-top: 5vw;
+    margin-top: 1vw;
     margin-left: 5vw;
     width: 20vw;
     height: 5vw;
@@ -98,4 +99,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.delete_project_link {
+    background-color: #ff3f3f;
+    border: #ff3f3f;
 }

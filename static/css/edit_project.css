@@ -147,3 +147,33 @@
     justify-content: center;
     margin-top: 10px;
 }
+.link_back_block {
+    margin-right: 0.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.link_back {
+    background-color: #ffffff;
+    color: #000000;
+    width: 15vw;
+    height: 4.5vw;
+    vertical-align: middle;
+    border-radius: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.link_back:hover {
+    text-decoration: none;
+    color: #000000;
+}
+.link_back_text {
+    font-size: 1.5vw;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

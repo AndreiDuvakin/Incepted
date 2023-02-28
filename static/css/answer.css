@@ -15,11 +15,45 @@ body {
     margin-bottom: 20vw;
 }
 .link_back_block {
+    margin-right: 0.5vw;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
+}
+.head_buttons_block {
+    display: flex;
+    flex-direction: row;
+}
+.link_edit_block {
+    margin-left: 0.5vw;
+    background-color: #9E795A;
+    border: #9E795A;
+    width: 13vw;
+    height: 4.5vw;
+    color: #ffffff;
+    border-radius: 5vw;
+    vertical-align: middle;
+    font-size: 1.5vw;
+}
+.link_edit {
+    width: 13vw;
+    height: 4.5vw;
+}
+.link_edit:hover {
+    text-decoration: none;
+    color: #000000;
+}
+.link_edit_text {
+    width: 13vw;
+    height: 4.5vw;
+    text-align: center;
+    font-size: 1.5vw;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .link_back {
     background-color: #ffffff;
@@ -60,6 +94,9 @@ body {
     text-align: center;
     color: #000000;
     font-size: 4vw;
+    max-width: 80%;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 .description_task {
     width: 80%;

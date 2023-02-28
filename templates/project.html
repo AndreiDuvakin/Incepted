@@ -9,11 +9,13 @@
     <div class="project_header">
         <div class="edit_block">
             {% if current_user.id == project.creator %}
-            <a id="edit_button" class="edit_button" href="">
-                <img class="edit_button_image" src="../static/images/pen_b.png">
-            </a>
+            <div class="edit_button">
+                <a id="edit_button" class="edit_button_link" href="">
+                    <p class="edit_button_text">Редактировать</p>
+                </a>
+            </div>
             {% else %}
-            <p class="edit_button"> </p>
+            <p style="width: 12vw;"> </p>
             {% endif %}
         </div>
         <div class="brand_block">
@@ -45,7 +47,7 @@
                 <h3 class="header_title_2">Задачи</h3>
                 <div class="new_task_block">
                     <a class="new_task_link" id="new_task_link" href="/">
-                        <img class="new_task_image" src="../static/images/plus_b.png">
+                        <p class="new_task_text">Добавить</p>
                     </a>
                 </div>
             </div>

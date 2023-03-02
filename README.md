@@ -22,9 +22,12 @@
 ### Email:
 - andrei@duvakin.ru
 - incepted@yandex.ru
+- arefev5002@gmail.com
 
 ### VK:
 - https://vk.com/andreiduvakin
+- https://vk.com/menofiot
 
 ### Telegram:
-- @andrei_duvakin
+- https://t.me/andrei_duvakin
+- https://t.me/Sanchezzzzzzzzzzzzzzzzzzzzzzzzzz

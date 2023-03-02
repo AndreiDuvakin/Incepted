@@ -1,7 +1,6 @@
 import datetime
 import os
 import logging
-import shutil
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
@@ -54,6 +53,14 @@ def base():
         return render_template('main.html', title='Главная')
     else:
         return redirect('/projects')
+
+
+@app.route('/showcase', methods=['GET', 'POST'])
+def showcase():
+    if current_user.is_authenticated:
+        return render_template('showcase.html', title='Витрина')
+    else:
+        return redirect('/login')
 
 
 @app.route('/project/<int:id_project>/quest/<int:id_task>/edit', methods=['GET', 'POST'])
@@ -232,7 +239,7 @@ def edit_project(id_project):
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
             if current_user.id == current_project.creator:
                 list_users = list(
-                    map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id).all()))
+                    map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id, User.activated == 1).all()))
                 staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(
                     User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
                 form = ProjectForm()

@@ -239,7 +239,8 @@ def edit_project(id_project):
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
             if current_user.id == current_project.creator:
                 list_users = list(
-                    map(lambda x: get_user_data(x), data_session.query(User).filter(User.id != current_user.id, User.activated == 1).all()))
+                    map(lambda x: get_user_data(x),
+                        data_session.query(User).filter(User.id != current_user.id, User.activated == 1).all()))
                 staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(
                     User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
                 form = ProjectForm()
@@ -406,7 +407,9 @@ def user_view(_login):
                     StaffProjects.project).filter(
                     StaffProjects.user == user.id).all()))))).all()
             resp = list(map(lambda x: get_projects_data(x), current_projects))
-            return render_template('user_view.html', title=user.name + ' ' + user.surname, user=user,
+            return render_template('user_view.html',
+                                   title=user.name if user.name else '' + ' ' + user.surname if user.surname else '',
+                                   user=user,
                                    list_projects=resp)
         else:
             abort(404)

@@ -4,7 +4,7 @@
 }
 .header_block {
     width: 100%;
-    height: 50vw;
+    height: 20vw;
     background-position: center;
     display: flex;
     flex-direction: column;
@@ -19,7 +19,6 @@
 .header_title_2 {
     color: #ffffff;
     text-align: center;
-    margin-top: 50px;
     font-size: 1.5vw;
     width: 50vw;
 }
@@ -61,11 +60,12 @@
     width: 94%;
     height: 45vw;
     overflow-y: auto;
+    padding-top: 2vw;
 }
 .list_project {
     width: 95%;
     margin-left: 2.5%;
-    margin-top: 2vw;
+    margin-top: 0.5vw;
     overflow-y: hidden;
     overflow-x: hidden;
 }

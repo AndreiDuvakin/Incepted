@@ -1,24 +1,7 @@
 <link rel="stylesheet" href="../static/css/profile.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="profile_page">
-    <div class="open_button_block">
-        <div class="open_button_content">
-            <h2 class="open_button_title">Профиль</h2>
-            <p class="open_button_article">Здесь можно поменять настройки учетной записи</p>
-            <a class="open_button" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-               aria-controls="collapseExample">
-                <div class="open_button_text">
-                    Редактировать
-                </div>
-            </a>
-            <a class="profile_button" id="logout_button" href="/logout">
-                <div class="profile_button_text">
-                    <p>Выйти</p>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="profile_block collapse" id="collapseExample">
+    <div class="profile_block">
         <div class="header_profile">
             <img class="user_photo" src="../{{current_user.photo}}"/>
         </div>
@@ -94,6 +77,11 @@
                 </div>
                 <div class="form_data_button">
                     {{ form.submit(type="submit", class="profile_button") }}
+                    <a class="profile_button" id="logout_button" href="/logout">
+                        <div class="profile_button_text">
+                            <p>Выйти</p>
+                        </div>
+                    </a>
                 </div>
             </form>
         </div>

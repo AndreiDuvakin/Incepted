@@ -6,7 +6,8 @@
     background: linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url(../images/back_profile_one.jpg);background-repeat: repeat;  background-position: center;
 }
 .profile_block {
-    height: 57vw;
+    margin-top: 5vw;
+    height: 65vw;
     width: 85%;
     margin-left: 7.5%;
     margin-bottom: 6%;
@@ -99,12 +100,12 @@ form {
     padding-left: 15px;
 }
 #logout_button {
-    color: #000000;
-    background-color:#f5d3b8;
+    color: #ffffff;
+    background-color:#ff3f3f;
 }
 #logout_button:hover {
     text-decoration: none;
-    color: #000000;
+    color: #ffffff;
 }
 .profile_button_text {
     width: 100%;

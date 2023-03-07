@@ -65,6 +65,7 @@
                                         <div class="quest_title_block">
                                             <p class="quest_title">{{ quest.name }}</p>
                                         </div>
+                                    {% if not project.is_template %}
                                     </div>
                                     {% if quest.overdue == 'yes' and quest.realized != 1 %}
                                     <div class="deadline_block alert alert-danger" role="alert">
@@ -86,6 +87,7 @@
                                     <div class="deadline_block alert alert-success" role="alert">
                                         Задача выполнена
                                     </div>
+                                    {% endif %}
                                     {% endif %}
                                 </button>
                             </h2>

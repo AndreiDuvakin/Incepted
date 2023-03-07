@@ -1,6 +1,7 @@
 import datetime
 import os
 import logging
+import shutil
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
@@ -13,7 +14,8 @@ from sqlalchemy import or_
 from json import loads
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
-    overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data, delete_quest_data
+    overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data, delete_quest_data, \
+    copy_template
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
@@ -39,6 +41,7 @@ with open('incepted.config', 'r', encoding='utf-8') as file:
     file = loads(file)
 key = file["encrypt_key"]
 app.config['SECRET_KEY'] = key
+app.debug = True
 logging.basicConfig(level=logging.INFO, filename="logfiles/main.log", format="%(asctime)s %(levelname)s %(message)s",
                     encoding='utf-8')
 csrf = CSRFProtect(app)
@@ -55,10 +58,55 @@ def base():
         return redirect('/projects')
 
 
+@app.route('/template/<int:id_template>/create')
+def create_by_template(id_template):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_template = data_session.query(Projects).filter(Projects.id == id_template).first()
+        if current_template:
+            new_project = Projects(
+                name=current_template.name,
+                description=current_template.description,
+                date_create=datetime.datetime.now(),
+                creator=current_user.id,
+                is_open=False,
+                is_template=False
+            )
+            data_session.add(new_project)
+            data_session.flush()
+            data_session.refresh(new_project)
+            data_session.commit()
+            copy_template(current_template, new_project, data_session, current_user)
+            return redirect('/projects')
+        else:
+            abort(403)
+    else:
+        return redirect('/login')
+
+
+@app.route('/template/<int:id_template>')
+def template_project(id_template):
+    if current_user.is_authenticated:
+        data_session = db_session.create_session()
+        current_project = data_session.query(Projects).filter(Projects.id == id_template).first()
+        if current_project:
+            quests = data_session.query(Quests).filter(Quests.project == current_project.id).all()
+            files_list = file_tree(f'static/app_files/all_projects/{current_project.id}')
+            return render_template('template_project.html', title=f'Шаблон {current_project.name}',
+                                   project=current_project, quests=quests, file_tree=files_list)
+        else:
+            abort(404)
+    else:
+        return redirect('/login')
+
+
 @app.route('/showcase', methods=['GET', 'POST'])
 def showcase():
     if current_user.is_authenticated:
-        return render_template('showcase.html', title='Витрина')
+        data_session = db_session.create_session()
+        list_template = list(map(lambda curr_project: get_projects_data(curr_project),
+                                 data_session.query(Projects).filter(Projects.is_template == 1).all()))
+        return render_template('showcase.html', title='Витрина', list_template=list_template)
     else:
         return redirect('/login')
 
@@ -429,7 +477,8 @@ def new_project():
                 name=form.name.data,
                 description=form.description.data,
                 date_create=datetime.datetime.now(),
-                creator=current_user.id
+                creator=current_user.id,
+                is_template=form.is_template.data
             )
             current_project.photo = save_project_logo(
                 form.logo.data) if form.logo.data else 'static/images/none_project.png'
@@ -595,7 +644,7 @@ def register():
                 activity=datetime.datetime.now(),
                 data_reg=datetime.date.today(),
                 photo='static/images/none_logo.png',
-                role=1
+                role=3
             )
             user.set_password(form.password.data)
             data_session.add(user)
@@ -655,7 +704,7 @@ def main():
     db_session.global_init(db_path)
     if not db:
         init_db_default()
-    serve(app, host='0.0.0.0', port=5000, threads=10)
+    serve(app, host='0.0.0.0', port=5000, threads=100)
 
 
 if __name__ == '__main__':

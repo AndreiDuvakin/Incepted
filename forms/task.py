@@ -7,8 +7,8 @@ from wtforms.validators import DataRequired
 class Task(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
     description = TextAreaField('Описание', validators=[DataRequired()])
-    deadline_date = DateField('Дедлайн', validators=[DataRequired()])
-    deadline_time = TimeField('', validators=[DataRequired()])
+    deadline_date = DateField('Дедлайн')
+    deadline_time = TimeField('')
     submit = SubmitField('Создать')
     save = SubmitField('Сохранить')
     delete = SubmitField('Удалить')

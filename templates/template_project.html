@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="../static/css/template_project.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="template_page">
+    <div class="link_back_block">
+        <a class="link_back" href="../showcase">
+            <p class="link_back_text">К витрине</p>
+        </a>
+    </div>
+    <div class="brand_block">
+        <img class="project_logo" src="../{{project.photo}}"/>
+        <p class="name_project header_title">{{ project.name }}</p>
+    </div>
+    <div class="body_block">
+        <div class="header_task_block">
+            <h3 class="header_title_2">Задачи</h3>
+            <div class="task_block">
+                <div class="task">
+                    {% for quest in quests %}
+                    <div class="accordion list_quests" id="accordionPanelsStayOpen{{ quest.id }}">
+                        <div class="accordion-item quest">
+                            <h2 class="accordion-header quest_header" id="panelsStayOpen-heading{{ quest.id }}">
+                                <button class="accordion-button quest_header_button" type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapse{{ quest.id }}" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapse{{ quest.id }}">
+                                    <div class="quest_button_block_one">
+                                        <div class="quest_title_block">
+                                            <p class="quest_title">{{ quest.name }}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapse{{ quest.id }}"
+                                 class="accordion-collapse collapse quest_body_block"
+                                 aria-labelledby="panelsStayOpen-heading{{ quest.id }}">
+                                <div class="accordion-body quest_body">
+                                    {% if quest.realized == 0 %}
+                                    <div class="quest_body">
+                                        <div class="quest_description_block">
+                                            <p class="quest_description_title">Описание</p>
+                                            <div class="quest_description">
+                                                <p class="quest_description_text">{{ quest.description }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="quest_body">
+                                        <div class="quest_description_block">
+                                            <p class="quest_description_title">Описание</p>
+                                            <div class="quest_description">
+                                                <p class="quest_description_text">{{ quest.description }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="quest_solve_button">
+                                            <a class="quest_solve_link" href="{{ project.id }}/quest/{{ quest.id }}">
+                                                <p class="quest_solve_text">Посмотреть</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="files_block">
+            <h2 class="files_title">Файлы</h2>
+            <div class="list_files_block">
+                <div class="list_files">
+                    {% for item in file_tree %}
+                    {% if item['type'] == 'file' %}
+                    <div class="file">
+                        <div class="file_head">
+                            <nav class="file_head_group" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                <ol class="breadcrumb file_head_path">
+                                    {% for path in item['current_path'] %}
+                                    {% if loop.index != 1 %}
+                                    <li class="breadcrumb-item active file_path" aria-current="page">{{ path }}</li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ol>
+                            </nav>
+                        </div>
+                        <div class="file_buttons">
+                            <div class="btn-group file_buttons_groud">
+                                <a href="../../../{{ item['path'] }}" download="" class="btn btn-primary file_download">
+                                    <p class="button_text">Скачать</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="create_project_block">
+            <a class="create_link" href="/template/{{project.id}}/create">
+                <p class="create_text">Создать</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

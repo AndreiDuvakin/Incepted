@@ -51,6 +51,14 @@
                     </div>
                     <div class="form_data_button">
                         {{ form.submit(type="submit", class="project_button") }}
+                        {% if current_user.role != 3 %}
+                        <div class="box">
+                            {{ form.is_template(class="is_template")}} {{form.is_template.label }}<br/>
+                            {% for error in form.is_template.errors %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -17,3 +17,5 @@ class Projects(SqlAlchemyBase, UserMixin):
                                     default=date.today())
     creator = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"), nullable=True, default=None)
+    is_open = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)
+    is_template = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)

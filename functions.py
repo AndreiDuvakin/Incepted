@@ -56,7 +56,7 @@ def mail(msg, to, topic='Подтверждение почты'):
 
 def init_db_default():
     data_session = db_session.create_session()
-    roles = [['admin', 2], ['moderator', 1], ['user', 0]]
+    roles = [['admin', 90], ['moderator', 75], ['counselor', 45], ['user', 0]]
     for i in roles:
         role = Roles(
             name=i[0],
@@ -219,4 +219,43 @@ def delete_project_data(project, data_session):
              data_session.query(Files).filter(Files.path.contains(f'all_projects/{str(project.id)}/')).all()))
     shutil.rmtree(f'static/app_files/all_projects/{str(project.id)}')
     data_session.delete(project)
+    data_session.commit()
+
+
+def copy_file_from_template(file, new_project, data_session, current_user):
+    path = f'static/app_files/all_projects/{str(new_project.id)}/{str(file.path).split("/")[-1]}'
+    shutil.copy(file.path, path)
+    new_file = Files(
+        path=path,
+        user=current_user.id,
+        up_date=datetime.datetime.now()
+    )
+    data_session.add(new_file)
+
+
+def copy_quests_from_template(quest, new_project, data_session, current_user):
+    new_quest = Quests(
+        project=new_project.id,
+        creator=current_user.id,
+        name=quest.name,
+        description=quest.description,
+        date_create=datetime.datetime.now(),
+        deadline=quest.deadline,
+        realized=False
+    )
+    data_session.add(new_quest)
+
+
+def copy_template(template, new_project, data_session, current_user):
+    os.mkdir(f'static/app_files/all_projects/{str(new_project.id)}')
+    if 'none_project' not in template.photo:
+        filename = f'static/app_files/project_logo/{uuid.uuid4()}.png'
+        shutil.copy(template.photo, filename)
+        new_project.photo = filename
+    else:
+        new_project.photo = 'static/images/none_project.png'
+    list(map(lambda file: copy_file_from_template(file, new_project, data_session, current_user),
+             data_session.query(Files).filter(Files.path.contains(f'all_projects/{str(template.id)}/')).all()))
+    list(map(lambda quest: copy_quests_from_template(quest, new_project, data_session, current_user),
+             data_session.query(Quests).filter(Quests.project == template.id).all()))
     data_session.commit()

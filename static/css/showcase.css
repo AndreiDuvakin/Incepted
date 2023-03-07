@@ -1,4 +1,130 @@
 .showscale_page {
     height: 120vw;
     background-color: #dcb495;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.header_block {
+    width: 100%;
+    height: 20vw;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient( rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85) ), url(../images/showcase.jpg);background-repeat: repeat;  background-position: center;
+}
+.header_title {
+    color: #ffffff;
+    font-size: 7vw;
+}
+.header_title_2 {
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.5vw;
+    width: 50vw;
+}
+.templates_block {
+    width: 95%;
+    margin-top: 5vw;
+}
+.templates_title {
+    display: flex;
+    justify-content: center;
+    font-size: 3.5vw;
+}
+.templates_list {
+    height: 30vw;
+    margin-top: 2vw;
+    border: 0.2vw solid #694a2d;
+    border-radius: 2vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.template {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    align-items: center;
+    min-height: 28vw;
+    min-width: 25vw;
+    max-width: 25vw;
+    background-color: #9E795A;
+    margin: 1vw;
+    border-radius: 2vw;
+}
+.template_title {
+    margin-top: 1vw;
+    max-width: 90%;
+    text-align: center;
+    color: #ffffff;
+    font-size: 2vw;
+    font-weight: 500;
+}
+.description {
+    background-color: #EDCBB0;
+    max-width: 90;
+    height: auto;
+    height: 15vw;
+    min-width: 85%;
+    max-width: 85%;
+    border-radius: 0.5vw;
+}
+.description_text {
+    margin: 0.8vw;
+    overflow-wrap: normal;  /* не поддерживает IE, Firefox; является копией word-wrap */ 
+    word-wrap: normal;
+    word-break: normal;  /* не поддерживает Opera12.14, значение keep-all не поддерживается IE, Chrome */ 
+    line-break: auto;  /* нет поддержки для русского языка */ 
+    hyphens: manual;
+}
+.description {
+    overflow-y: auto;
+}
+.description::-webkit-scrollbar {
+    width: 0.8vw;               /* ширина scrollbar */
+}
+.description::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}
+.open_button {
+    margin-top: 1vw;
+    background-color: #ffffff;
+    color: #000000;
+    width: 15vw;
+    height: 4.5vw;
+    vertical-align: middle;
+    border-radius: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.open_button:hover {
+    text-decoration: none;
+    color: #000000;
+}
+.open_button_text {
+    font-size: 1.5vw;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.open_button, .open_button_link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15vw;
+    height: 4.5vw;
+    color: #000000;
+}
+.open_button_link:hover {
+    text-decoration: none;
+    color: #000000;
 }

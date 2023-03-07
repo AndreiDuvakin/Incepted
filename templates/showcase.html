@@ -1,8 +1,32 @@
 <link rel="stylesheet" href="../static/css/showcase.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="showscale_page">
-<div class="header">
+    <div class="header_block">
+        <h2 class="header_title">Витрина</h2>
+        <strong class="header_title_2">Здесь вы можете находить макеты для своих проектов, а также подключатся к другим проектам</strong>
+    </div>
+    <div class="templates_block">
+        <h2 class="templates_title">Шаблоны проектов</h2>
+        <div class="templates_list">
+            {% for template in list_template %}
+            <div class="template">
+                <p class="template_title">
+                    {{ template.name }}
+                </p>
+                <div class="description">
+                    <p class="description_text">{{ template.description }}</p>
+                </div>
+                <div class="open_button">
+                    <a class="open_button_link" href="/template/{{ template.id }}">
+                        <p class="open_button_text">Открыть</p>
+                    </a>
+                </div>
+            </div>            
+            {% endfor %}
+        </div>
+    </div>
+    <div class="open_projects_block">
 
-</div>
+    </div>
 </div>
 {% endblock %}

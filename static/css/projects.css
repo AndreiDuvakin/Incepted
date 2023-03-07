@@ -62,6 +62,14 @@
     overflow-y: auto;
     padding-top: 2vw;
 }
+.list_project_block::-webkit-scrollbar {
+    width: 0.8vw;               /* ширина scrollbar */
+}
+.list_project_block::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}
 .list_project {
     width: 95%;
     margin-left: 2.5%;
@@ -133,6 +141,14 @@
     border-radius: 2vw;
     overflow-y: auto;
 }
+.collaborator_block::-webkit-scrollbar {
+    width: 0.8vw;               /* ширина scrollbar */
+}
+.collaborator_block::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}
 .description_block {
     width: 48%;
     height: 90%;
@@ -145,11 +161,21 @@
     font-size: 2vw;
 }
 .description_block_text {
+    overflow-y: auto;
+    overflow-x: hidden;
     width: 90% !important;
     height: 80% !important;
     width: 50%;
     background-color: #dcb495;
     border-radius: 2vw;
+}
+.description_block_text::-webkit-scrollbar {
+    width: 0.8vw;               /* ширина scrollbar */
+}
+.description_block_text::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
 }
 .description_text {
     width: 100% !important;

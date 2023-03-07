@@ -26,7 +26,8 @@
                 </div>
             </div>
             <div class="data_form_block">
-                <div class="form_data">
+                {% if not porject.is_template %}
+                <div class="form_data" id="form_data">
                     <label class="form_label">{{ form.deadline_date.label }}</label>
                     {{ form.deadline_date(class="input_data deadline padding_data", type="date") }}
                     {% for error in form.deadline_date.errors %}
@@ -37,8 +38,9 @@
                     <div class="alert alert-danger" role="alert">{{ error }}</div>
                     {% endfor %}
                 </div>
-                <div class="form_data_button">
-                    {{ form.submit(type="submit", class="quest_button") }}
+                {% endif %}
+                <div class="form_data_button" {% if porject.is_template %} style="margin-left: -2vw;"{% endif %}>
+                    {{ form.submit(type="submit", class="quest_button", id="quest_button") }}
                 </div>
             </div>
         </form>

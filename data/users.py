@@ -26,6 +26,7 @@ class User(SqlAlchemyBase, UserMixin):
     activity = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     birthday = sqlalchemy.Column(sqlalchemy.Date, nullable=True)
     activated = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)
+    banned = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)

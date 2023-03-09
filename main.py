@@ -74,12 +74,14 @@ def admin():
                 data_form = list(map(lambda x: (x[0], x[1]), data_form.items()))
                 list(
                     map(lambda x: save_admin_data(x, data_session), list(filter(lambda x: 'role_' in x[0], data_form))))
-                list_id = list(map(lambda user: int(user[0].split('_')[-1]), list(filter(lambda x: 'active_' in x[0], data_form))))
+                activ_id = list(
+                    map(lambda user: int(user[0].split('_')[-1]), list(filter(lambda x: 'active_' in x[0], data_form))))
+                banned_id = list(
+                    map(lambda user: int(user[0].split('_')[-1]), list(filter(lambda x: 'banned_' in x[0], data_form))))
                 for user in users:
-                    if user.id not in list_id:
-                        user.activated = 0
-                    else:
-                        user.activated = 1
+                    user.activated = 0 if user.id not in activ_id else 1
+                for user in users:
+                    user.banned = 0 if user.id not in banned_id else 1
                 data_session.commit()
             return render_template('admin.html', title='Панель админа', roles=roles, users=users, form=form)
     abort(404)
@@ -622,10 +624,15 @@ def login():
             if not user:
                 user = data_session.query(User).filter(User.login == form.login.data).first()
             if user and user.check_password(form.password.data):
-                if user.activated:
+                if user.activated and not user.banned:
                     login_user(user, remember=form.remember_me.data)
                     logging.info(f'{user.login} logged in')
                     return redirect('/projects')
+                elif user.banned:
+                    return render_template('login.html',
+                                           message="Ваш аккаунт заблокирован, обратитесь в поддержку: inepted@yandex.ru",
+                                           danger=True,
+                                           form=form)
                 else:
                     return render_template('login.html',
                                            message="Ваша почта не подтверждена",

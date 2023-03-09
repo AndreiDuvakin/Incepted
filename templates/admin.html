@@ -23,6 +23,10 @@
                     <label class="active_label">Активирован</label>
                     <input class="choose_active" name="active_{{user.id}}" type="checkbox" value="y" {% if user.activated == 1 %}checked="yes"{% endif %}>
                 </div>
+                <div class="user_banned">
+                    <label class="banned_label">Бан</label>
+                    <input class="choose_banned" name="banned_{{user.id}}" type="checkbox" value="y" {% if user.banned == 1 %}checked="yes"{% endif %}>
+                </div>
             </div>
             {% endfor %}
         </div>

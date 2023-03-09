@@ -90,6 +90,6 @@
     flex-direction: column;
     align-items: center;
 }
-.user_active {
+.user_active, .user_banned {
     margin-left: 1vw;
 }

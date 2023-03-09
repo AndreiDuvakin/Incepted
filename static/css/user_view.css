@@ -113,6 +113,9 @@
 }
 .project_title {
     font-size: 3.5vw;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap
 }
 .project_button_block_one {
     width: 50%;

@@ -118,6 +118,7 @@
     font-size: 3.5vw;
     overflow-y: hidden;
     overflow-x: auto;
+    white-space: nowrap
 }
 .project_title::-webkit-scrollbar {
     height: 0.8vw;               /* ширина scrollbar */

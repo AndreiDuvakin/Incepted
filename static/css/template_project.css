@@ -117,12 +117,14 @@
 .quest_title {
     overflow-y: hidden;
     overflow-x: hidden;
-    max-height: 1.5vw;
+    max-height: 3vw;
     font-size: 1.5vw;
     display: flex;
     align-items: center;
     margin-top: 0.7vw;
     margin-left: 1.8vw;
+    font-size: 3.5vw;
+    white-space: nowrap
 }
 .quest_body_block {
     background-color: #9E795A;

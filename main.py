@@ -1,7 +1,6 @@
 import datetime
 import os
 import logging
-import shutil
 
 from flask import Flask, render_template, request, url_for
 from flask_login import login_user, current_user, LoginManager, logout_user, login_required
@@ -12,10 +11,12 @@ from werkzeug.utils import redirect
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from sqlalchemy import or_
 from json import loads
+from waitress import serve
 
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
     overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data, delete_quest_data, \
-    copy_template
+    copy_template, save_admin_data
+
 from forms.edit_profile import EditProfileForm
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
@@ -24,6 +25,7 @@ from forms.project import ProjectForm, AddFileProject
 from forms.recovery import RecoveryForm, NewPasswordForm
 from forms.conf_delete_project import DeleteProjectForm
 from forms.task import Task, AnswerTask
+from forms.encrypt_form import EncryptForm
 
 from data.users import User
 from data.quests import Quests
@@ -32,7 +34,7 @@ from data.proof_file import FileProof
 from data.files import Files
 from data.projects import Projects
 from data.staff_projects import StaffProjects
-from waitress import serve
+from data.roles import Roles
 from data import db_session
 
 app = Flask(__name__)
@@ -56,6 +58,24 @@ def base():
         return render_template('main.html', title='Главная')
     else:
         return redirect('/projects')
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if current_user.is_authenticated:
+        if current_user.role == 1:
+            data_session = db_session.create_session()
+            roles, users = data_session.query(Roles).all(), \
+                data_session.query(User).filter(User.id != current_user.id).all()
+            form = EncryptForm()
+            if request.method == 'POST':
+                data_form = request.form.to_dict()
+                del data_form['csrf_token'], data_form['submit']
+                data_form = list(map(lambda x: (x[0], x[1]), data_form.items()))
+                list(map(lambda x: save_admin_data(x, data_session), data_form))
+                data_session.commit()
+            return render_template('admin.html', title='Панель админа', roles=roles, users=users, form=form)
+    abort(404)
 
 
 @app.route('/template/<int:id_template>/create')
@@ -533,6 +553,7 @@ def projects():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if current_user.is_authenticated:
+        data_session = db_session.create_session()
         form = EditProfileForm(
             CombinedMultiDict((request.files, request.form)),
             email=current_user.email,
@@ -542,7 +563,6 @@ def profile():
             birthday=current_user.birthday
         )
         if form.del_photo.data:
-            data_session = db_session.create_session()
             user = data_session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 return render_template('profile.html', title='Профиль', form=form,
@@ -551,7 +571,6 @@ def profile():
             user.photo = 'static/images/none_logo.png'
             data_session.commit()
         if form.validate_on_submit():
-            data_session = db_session.create_session()
             user = data_session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 return render_template('profile.html', title='Профиль', form=form,

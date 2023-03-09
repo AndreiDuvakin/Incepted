@@ -30,6 +30,11 @@
         <a class="nav_chapter" href="/showcase">
             <p class="nav_chapter_text">Витрина</p>
         </a>
+        {% if current_user.role == 1 %}
+        <a class="nav_chapter" href="/admin">
+            <p class="nav_chapter_text">Админ</p>
+        </a>
+        {% endif %}
     </div>
 </nav>
 {% else %}

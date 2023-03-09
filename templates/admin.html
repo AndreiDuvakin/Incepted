@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="../static/css/admin.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="admin_page">
+    <h2 class="roles_title">Изменение ролей</h2>
+    <form action="" method="post" class="edit_user_form" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="roles_block">
+        <div class="users_block">
+            {% for user in users %}
+            <div class="user">
+                <a class="link_to_user" href="/user/{{ user.login }}">
+                    <img class="user_logo" src="{{user.photo}}">
+                    <p class="user_names">{{user.name}}</p>
+                </a>
+                <select name="role_{{ user.id }}" class="form-select role_div" aria-label="Default select example">
+                    {% for role in roles %}
+                    <option class="role" value="{{ loop.index }}" {% if user.role == loop.index %}selected{%
+                            endif %}>{{ roles[loop.index0].name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {{ form.submit(type="submit", class="save_button") }}
+    </form>
+</div>
+{% endblock %}

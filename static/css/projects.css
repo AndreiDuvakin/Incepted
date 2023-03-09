@@ -116,6 +116,16 @@
 }
 .project_title {
     font-size: 3.5vw;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+.project_title::-webkit-scrollbar {
+    height: 0.8vw;               /* ширина scrollbar */
+}
+.project_title::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
 }
 .project_button_block_one {
     width: 50%;

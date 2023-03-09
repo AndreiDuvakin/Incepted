@@ -4,7 +4,6 @@ import shutil
 import smtplib
 from json import loads
 from email.message import EmailMessage
-from sqlalchemy import or_
 
 from data.answer import Answer
 from data.proof_file import FileProof
@@ -14,6 +13,7 @@ from data.users import User
 from data.staff_projects import StaffProjects
 from data.files import Files
 from data import db_session
+
 import uuid
 import pymorphy2
 
@@ -259,3 +259,9 @@ def copy_template(template, new_project, data_session, current_user):
     list(map(lambda quest: copy_quests_from_template(quest, new_project, data_session, current_user),
              data_session.query(Quests).filter(Quests.project == template.id).all()))
     data_session.commit()
+
+
+def save_admin_data(data, data_session):
+    user = data_session.query(User).filter(User.id == data[0][5:]).first()
+    if user.role != data[1]:
+        user.role = data[1]

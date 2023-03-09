@@ -262,6 +262,6 @@ def copy_template(template, new_project, data_session, current_user):
 
 
 def save_admin_data(data, data_session):
-    user = data_session.query(User).filter(User.id == data[0][5:]).first()
+    user = data_session.query(User).filter(User.id == data[0].split('_')[-1]).first()
     if user.role != data[1]:
         user.role = data[1]

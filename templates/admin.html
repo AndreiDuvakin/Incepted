@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="../static/css/admin.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="admin_page">
-    <h2 class="roles_title">Изменение ролей</h2>
+    <h2 class="admine_title">Изменение данных пользователей</h2>
     <form action="" method="post" class="edit_user_form" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <div class="roles_block">
+    <div class="admin_block">
         <div class="users_block">
             {% for user in users %}
             <div class="user">
@@ -19,6 +19,10 @@
                     </option>
                     {% endfor %}
                 </select>
+                <div class="user_active">
+                    <label class="active_label">Активирован</label>
+                    <input class="choose_active" name="active_{{user.id}}" type="checkbox" value="y" {% if user.activated == 1 %}checked="yes"{% endif %}>
+                </div>
             </div>
             {% endfor %}
         </div>

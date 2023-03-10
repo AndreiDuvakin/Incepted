@@ -79,9 +79,9 @@ def admin():
                 banned_id = list(
                     map(lambda user: int(user[0].split('_')[-1]), list(filter(lambda x: 'banned_' in x[0], data_form))))
                 for user in users:
-                    user.activated = 0 if user.id not in activ_id else 1
-                for user in users:
-                    user.banned = 0 if user.id not in banned_id else 1
+                    if int(user.role) != 1:
+                        user.activated = 0 if user.id not in activ_id else 1
+                        user.banned = 0 if user.id not in banned_id else 1
                 data_session.commit()
             return render_template('admin.html', title='Панель админа', roles=roles, users=users, form=form)
     abort(404)
@@ -93,7 +93,7 @@ def create_by_template(id_template):
         data_session = db_session.create_session()
         current_template = data_session.query(Projects).filter(Projects.id == id_template).first()
         if current_template:
-            new_project = Projects(
+            add_project = Projects(
                 name=current_template.name,
                 description=current_template.description,
                 date_create=datetime.datetime.now(),
@@ -101,11 +101,11 @@ def create_by_template(id_template):
                 is_open=False,
                 is_template=False
             )
-            data_session.add(new_project)
+            data_session.add(add_project)
             data_session.flush()
-            data_session.refresh(new_project)
+            data_session.refresh(add_project)
             data_session.commit()
-            copy_template(current_template, new_project, data_session, current_user)
+            copy_template(current_template, add_project, data_session, current_user)
             return redirect('/projects')
         else:
             abort(403)

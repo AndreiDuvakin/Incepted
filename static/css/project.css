@@ -224,7 +224,7 @@
     align-items: flex-start;
 }
 .quest_title_block {
-    width: 100%;
+    width: 60%;
     height: 4vw;
     display: flex;
     align-items: center;

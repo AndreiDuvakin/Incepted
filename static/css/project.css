@@ -32,6 +32,9 @@
 .name_project {
     font-size: 3vw !important;
     margin-right: 4vw;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap
 }
 .edit_block {
     display: flex;
@@ -215,26 +218,36 @@
     align-items: center;
 }
 .quest_button_block_one {
-    width: 50%;
+    width: 90%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 }
 .quest_title_block {
-    width: 90%;
+    width: 100%;
     height: 4vw;
     display: flex;
     align-items: center;
 }
 .quest_title {
     overflow-y: hidden;
-    overflow-x: hidden;
-    max-height: 1.5vw;
+    overflow-x: auto;
+    max-height: 4vw;
     font-size: 1.5vw;
     display: flex;
     align-items: center;
     margin-top: 0.7vw;
     margin-left: 1.8vw;
+    font-size: 3.5vw;
+    white-space: nowrap
+}
+.quest_title::-webkit-scrollbar {
+    height: 0.8vw;               /* ширина scrollbar */
+}
+.quest_title::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
 }
 .deadline_block {
     border-radius: 5vw !important;

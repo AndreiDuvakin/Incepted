@@ -18,6 +18,7 @@ from functions import check_password, mail, init_db_default, get_projects_data, 
     copy_template, save_admin_data
 
 from forms.edit_profile import EditProfileForm
+from forms.link_showcase import AddLink
 from forms.login import LoginForm
 from forms.find_project import FindProjectForm
 from forms.register import RegisterForm
@@ -35,6 +36,7 @@ from data.files import Files
 from data.projects import Projects
 from data.staff_projects import StaffProjects
 from data.roles import Roles
+from data.showcase_link import ShowCaseLink
 from data import db_session
 
 app = Flask(__name__)
@@ -82,6 +84,9 @@ def admin():
                     if int(user.role) != 1:
                         user.activated = 0 if user.id not in activ_id else 1
                         user.banned = 0 if user.id not in banned_id else 1
+                    else:
+                        user.banned = 0
+                        user.activated = 1
                 data_session.commit()
             return render_template('admin.html', title='Панель админа', roles=roles, users=users, form=form)
     abort(404)
@@ -129,13 +134,44 @@ def template_project(id_template):
         return redirect('/login')
 
 
+@app.route('/showcase/link/<int:id_link>/delete')
+def delete_link(id_link):
+    if current_user.is_authenticated:
+        if current_user.role in [1, 4]:
+            data_session = db_session.create_session()
+            link = data_session.query(ShowCaseLink).filter(ShowCaseLink.id == id_link).first()
+            if link:
+                data_session.delete(link)
+                data_session.commit()
+                return redirect('/showcase')
+            else:
+                abort(404)
+        else:
+            abort(403)
+    return redirect('/login')
+
+
 @app.route('/showcase', methods=['GET', 'POST'])
 def showcase():
     if current_user.is_authenticated:
+        form = AddLink() if current_user.role in [1, 4] else None
         data_session = db_session.create_session()
+        if request.method == 'POST' and current_user.role in [1, 4]:
+            if form.validate_on_submit():
+                link = ShowCaseLink(
+                    link=form.link.data,
+                    name=form.name.data,
+                    user=current_user.id,
+                    up_date=datetime.datetime.now()
+                )
+                data_session.add(link)
+                data_session.commit()
+                return redirect('/showcase')
         list_template = list(map(lambda curr_project: get_projects_data(curr_project),
                                  data_session.query(Projects).filter(Projects.is_template == 1).all()))
-        return render_template('showcase.html', title='Витрина', list_template=list_template)
+        list_links = data_session.query(ShowCaseLink).all()
+        return render_template('showcase.html', title='Витрина', list_template=list_template, list_links=list_links,
+                               form=form, type=type)
     else:
         return redirect('/login')
 

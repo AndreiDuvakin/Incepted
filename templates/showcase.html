@@ -25,8 +25,50 @@
             {% endfor %}
         </div>
     </div>
-    <div class="open_projects_block">
-
+    <div class="links_block">
+        <div class="header_link">
+            <h2 class="links_title">Полезные ссылки</h2>
+            <button type="button" class="add_button btn btn-primary" id="add_link_button"
+                            onclick="add_link()">Добавить
+                    </button>
+            <button type="button" class="repeal_button btn btn-primary" id="repeal_link_button"
+                    onclick="repeal_link()" style="display: none">Отмена
+            </button>
+        </div>
+        <div class="link_list">
+            {% for link in list_links %}
+            <div class="link_block" {% if current_user.role in [1, 4] %}style="width:25vw !important;"{% endif %}>
+                <a class="link" href="{{ link.link }}">
+                    <p class="link_text">{{ link.name }}</p>
+                </a>
+                {% if current_user.role in [1, 4] %}
+                <a href="/showcase/link/{{ link.id }}/delete"
+                               class="btn btn-primary link_delete"><p class="delete_text">Удалить</p></a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% if current_user.role in [1, 4] %}
+        <div class="form_link" id="form_link" style="display: none;">
+            <form action="" method="post" class="link_form" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form_data">
+                    {{ form.link(class="link_input form-control", type="text", placeholder="Ссылка") }}
+                    {% for error in form.link.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form_data">
+                    {{ form.name(class="link_input form-control", type="text", placeholder="Название") }}
+                    {% for error in form.name.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {{ form.submit(type="submit", class="btn btn-primary submit_button") }}
+            </form>
+        </div>
+        {% endif %}
     </div>
 </div>
+<script type="text/javascript" src="../static/js/showcase.js"></script>
 {% endblock %}

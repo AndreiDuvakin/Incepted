@@ -15,7 +15,7 @@
                 </a>
             </div>
             {% else %}
-            <p style="width: 12vw;"> </p>
+            <p style="width: 12vw;"></p>
             {% endif %}
         </div>
         <div class="brand_block">
@@ -62,10 +62,11 @@
                                         data-bs-target="#panelsStayOpen-collapse{{ quest.id }}" aria-expanded="true"
                                         aria-controls="panelsStayOpen-collapse{{ quest.id }}">
                                     <div class="quest_button_block_one">
-                                        <div class="quest_title_block"{% if project.is_template %}style="width:100%;!important"{% endif %}>
+                                        <div class="quest_title_block" {% if project.is_template
+                                             %}style="width:100%;!important" {% endif %}>
                                             <p class="quest_title">{{ quest.name }}</p>
                                         </div>
-                                    {% if not project.is_template %}
+                                        {% if not project.is_template %}
                                     </div>
                                     {% if quest.overdue == 'yes' and quest.realized != 1 %}
                                     <div class="deadline_block alert alert-danger" role="alert">
@@ -103,10 +104,19 @@
                                                 <p class="quest_description_text">{{ quest.description }}</p>
                                             </div>
                                         </div>
+                                        <div class="quest_buttons_block">
                                         <div class="quest_solve_button">
                                             <a class="quest_solve_link" href="{{ project.id }}/quest/{{ quest.id }}">
                                                 <p class="quest_solve_text">Решить</p>
                                             </a>
+                                        </div>
+                                        {% if quest.creator == current_user.id or project.creator == current_user.id %}
+                                        <div class="link_edit_block">
+                                            <a class="link_edit" href="{{ project.id }}/quest/{{ quest.id }}/edit">
+                                                <p class="link_edit_text">Редактировать</p>
+                                            </a>
+                                        </div>
+                                        {% endif %}
                                         </div>
                                     </div>
                                     {% else %}

@@ -7,13 +7,6 @@
                 <p class="link_back_text">К проекту</p>
             </a>
         </div>
-        {% if task.creator == current_user.id or project.creator == current_user.id %}
-        <div class="link_edit_block">
-            <a class="link_edit" href="{{ task.id }}/edit">
-                <p class="link_edit_text">Редактировать</p>
-            </a>
-        </div>
-        {% endif %}
     </div>
     <div class="name_block">
         <div class="title_block">

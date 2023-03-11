@@ -309,7 +309,6 @@
     background-color: #000000;
     border: 2px solid #ffffff;
     border-radius: 3vw;
-    margin-left: 2vw;
 }
 .quest_solve_link:hover {
     text-decoration: none;
@@ -328,14 +327,14 @@
 #quest_solve_link_id {
     display: none;
 }
-.link_back_block {
+.link_back_block, .link_edit_block {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
 }
-.link_back {
+.link_back, .link_edit {
     background-color: #ffffff;
     color: #000000;
     width: 15vw;
@@ -346,11 +345,14 @@
     align-items: center;
     justify-content: center;
 }
-.link_back:hover {
+.link_edit {
+    width: 13vw;
+}
+.link_back:hover, .link_edit:hover {
     text-decoration: none;
     color: #000000;
 }
-.link_back_text {
+.link_back_text, .link_edit_text {
     font-size: 1.5vw;
     margin-top: 15px;
     display: flex;
@@ -415,4 +417,15 @@
 }
 .button_text {
     font-size: 1.3vw;
+}
+.quest_buttons_block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 15vw;
+    margin-top: 3vw;
+}
+.link_edit_block {
+    margin-top: 1vw;
 }

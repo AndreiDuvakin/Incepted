@@ -1,9 +1,9 @@
-<link rel="stylesheet" href="../static/css/profile.css"/>
+<link rel="stylesheet" href="../../../static/css/profile.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="profile_page">
     <div class="profile_block">
         <div class="header_profile">
-            <img class="user_photo" src="../{{current_user.photo}}"/>
+            <img class="user_photo" src="../../../{{user.photo}}"/>
         </div>
         <div class="edit_form">
             <form
@@ -52,7 +52,7 @@
                             <div class="alert alert-danger" role="alert">{{ error }}</div>
                             {% endfor %}
                         </div>
-                        {% if 'none' in current_user.photo %}
+                        {% if 'none' in user.photo %}
                         <div class="form_data">
                             <label class="form-label">{{ form.photo.label }}</label>
                             {{ form.photo(class="input_data dop_data", type="file") }} {% for

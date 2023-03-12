@@ -8,7 +8,7 @@
         <div class="users_block">
             {% for user in users %}
             <div class="user">
-                <a class="link_to_user" href="/user/{{ user.login }}">
+                <a class="link_to_user" href="/admin/user/{{ user.login }}">
                     <img class="user_logo" src="{{user.photo}}">
                     <p class="user_names">{{user.name}}</p>
                 </a>

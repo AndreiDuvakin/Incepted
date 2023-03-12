@@ -62,6 +62,45 @@ def base():
         return redirect('/projects')
 
 
+@app.route('/admin/user/<string:login_usr>', methods=['GET', 'POST'])
+def admin_user(login_usr):
+    if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
+        if current_user.role == 1:
+            data_session = db_session.create_session()
+            user = data_session.query(User).filter(User.login == login_usr).first()
+            if user and user.role != 1:
+                form = EditProfileForm(
+                    CombinedMultiDict((request.files, request.form)),
+                    email=user.email,
+                    name=user.name,
+                    surname=user.surname,
+                    about=user.about,
+                    birthday=user.birthday
+                )
+                if form.del_photo.data:
+                    os.remove(user.photo)
+                    user.photo = 'static/images/none_logo.png'
+                    data_session.commit()
+                if form.validate_on_submit():
+                    if form.photo.data:
+                        with open(f'static/app_files/user_logo/{user.login}.png', 'wb') as file:
+                            form.photo.data.save(file)
+                        user.photo = f'static/app_files/user_logo/{user.login}.png'
+                    user.name = form.name.data
+                    user.surname = form.surname.data
+                    user.about = form.about.data
+                    user.birthday = form.birthday.data
+                    user.email = form.email.data
+                    data_session.commit()
+                    return redirect(f'/admin/user/{str(login_usr)}')
+                return render_template('profile.html', title=user.login, form=form, message='', user=user)
+            else:
+                abort(403)
+    abort(404)
+
+
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if current_user.is_authenticated:
@@ -646,7 +685,7 @@ def profile():
             user = data_session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 return render_template('profile.html', title='Профиль', form=form,
-                                       message='Ошибка, пользователь ненайден')
+                                       message='Ошибка, пользователь ненайден', user=current_user)
             os.remove(current_user.photo)
             user.photo = 'static/images/none_logo.png'
             data_session.commit()
@@ -654,7 +693,7 @@ def profile():
             user = data_session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 return render_template('profile.html', title='Профиль', form=form,
-                                       message='Ошибка, пользователь ненайден')
+                                       message='Ошибка, пользователь ненайден', user=current_user)
             if form.email.data != current_user.email:
                 token = s.dumps(form.email.data)
                 link_conf = url_for('confirmation', token=token, _external=True)
@@ -672,7 +711,7 @@ def profile():
             user.birthday = form.birthday.data
             data_session.commit()
             return redirect('/profile')
-        return render_template('profile.html', title='Профиль', form=form, message='')
+        return render_template('profile.html', title='Профиль', form=form, message='', user=current_user)
     else:
         return redirect('/login')
 

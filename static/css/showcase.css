@@ -175,7 +175,7 @@
 }   
 .link_block {
     margin: 1vw;
-    width: 15vw;
+    width: 25vw;
     height: 6vw;
     background-color: #9E795A;
     display: flex;
@@ -199,10 +199,28 @@
     color: #ffffff;
 }
 .link_text {
-    height: 1.8vw;
+    margin-top: 1vw;
+    width: 13vw;
+    height: 3.5vw;
     color: #ffffff;
     font-size: 2vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overflow-wrap: normal;  /* не поддерживает IE, Firefox; является копией word-wrap */ 
+    word-wrap: normal;
+    word-break: normal;  /* не поддерживает Opera12.14, значение keep-all не поддерживается IE, Chrome */ 
+    line-break: auto;  /* нет поддержки для русского языка */ 
+    hyphens: manual;
+    white-space: nowrap
 }
+.link_text::-webkit-scrollbar {
+    height: 0.8vw;               /* ширина scrollbar */
+}
+.link_text::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}   
 .add_button, .link_delete, .repeal_button, .submit_button {
     border-radius: 1vw !important;
     margin: 1vw;

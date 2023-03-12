@@ -34,8 +34,17 @@
     margin-right: 4vw;
     overflow-y: hidden;
     overflow-x: auto;
-    white-space: nowrap
+    white-space: nowrap;
+    max-width: 40vw;
 }
+.name_project::-webkit-scrollbar {
+    height: 0.8vw;               /* ширина scrollbar */
+}
+.name_project::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}   
 .edit_block {
     display: flex;
     align-items: center;
@@ -44,7 +53,7 @@
 .edit_button {
     background-color: #9E795A;
     border: #9E795A;
-    width: 12vw;
+    width: 15vw;
     height: 5vw;
     color: #ffffff;
     border-radius: 5vw;
@@ -54,10 +63,10 @@
 .edit_button_text {
     color: #ffffff;
     height: 5vw;
-    margin-top: 32%;
+    margin-top: 25%;
 }
 .edit_button_link {
-    width: 12vw;
+    width: 15vw;
     height: 5vw;
     display: flex;
     align-items: center;
@@ -152,6 +161,14 @@
 .task {
     margin: 20px;
 }
+.task_block::-webkit-scrollbar {
+    width: 0.8vw;               /* ширина scrollbar */
+}
+.task_block::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}
 .body_block {
     display: flex;
     justify-content: space-evenly;
@@ -218,13 +235,13 @@
     align-items: center;
 }
 .quest_button_block_one {
-    width: 90%;
+    width: 68%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 }
 .quest_title_block {
-    width: 60%;
+    width: 96%;
     height: 4vw;
     display: flex;
     align-items: center;
@@ -232,11 +249,11 @@
 .quest_title {
     overflow-y: hidden;
     overflow-x: auto;
-    max-height: 4vw;
-    font-size: 1.5vw;
+    max-height: 5vw;
+    font-size: 2.1vw !important;
     display: flex;
     align-items: center;
-    margin-top: 0.7vw;
+    margin-top: 0.8vw;
     margin-left: 1.8vw;
     font-size: 3.5vw;
     white-space: nowrap

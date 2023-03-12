@@ -28,16 +28,18 @@
     <div class="links_block">
         <div class="header_link">
             <h2 class="links_title">Полезные ссылки</h2>
+            {% if current_user.role in [1, 4] %}
             <button type="button" class="add_button btn btn-primary" id="add_link_button"
                             onclick="add_link()">Добавить
                     </button>
             <button type="button" class="repeal_button btn btn-primary" id="repeal_link_button"
                     onclick="repeal_link()" style="display: none">Отмена
             </button>
+            {% endif %}
         </div>
         <div class="link_list">
             {% for link in list_links %}
-            <div class="link_block" {% if current_user.role in [1, 4] %}style="width:25vw !important;"{% endif %}>
+            <div class="link_block">
                 <a class="link" href="{{ link.link }}">
                     <p class="link_text">{{ link.name }}</p>
                 </a>

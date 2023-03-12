@@ -200,8 +200,9 @@ def edit_quest(id_project, id_task):
             if request.method == 'GET':
                 form.name.data = current_task.name
                 form.description.data = current_task.description
-                form.deadline_time.data = current_task.deadline.time()
-                form.deadline_date.data = current_task.deadline.date()
+                if current_task.deadline:
+                    form.deadline_time.data = current_task.deadline.time()
+                    form.deadline_date.data = current_task.deadline.date()
             if form.delete.data:
                 delete_quest_data(current_task, data_session)
                 data_session.delete(current_task)

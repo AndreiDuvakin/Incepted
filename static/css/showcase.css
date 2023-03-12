@@ -45,6 +45,14 @@
     align-items: center;
     justify-content: flex-start;
 }
+.templates_list::-webkit-scrollbar {
+    height: 1vw;               /* ширина scrollbar */
+  }
+.templates_list::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+  }
 .template {
     display: flex;
     justify-content: start;
@@ -154,7 +162,17 @@
     border-radius: 1.5vw;
     display: flex;
     align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
+.link_list::-webkit-scrollbar {
+    height: 0.8vw;               /* ширина scrollbar */
+}
+.link_list::-webkit-scrollbar-thumb {
+    background-color: #d49d51;    /* цвет плашки */
+    border-radius: 5vw;       /* закругления плашки */
+    border: 0.25vw solid #ffffff;
+}   
 .link_block {
     margin: 1vw;
     width: 15vw;

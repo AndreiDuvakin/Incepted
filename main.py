@@ -64,9 +64,9 @@ def base():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         if current_user.role == 1:
             data_session = db_session.create_session()
             roles, users = data_session.query(Roles).all(), \
@@ -96,9 +96,9 @@ def admin():
 
 @app.route('/template/<int:id_template>/create')
 def create_by_template(id_template):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_template = data_session.query(Projects).filter(Projects.id == id_template).first()
         if current_template:
@@ -124,9 +124,9 @@ def create_by_template(id_template):
 
 @app.route('/template/<int:id_template>')
 def template_project(id_template):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_template).first()
         if current_project:
@@ -142,9 +142,9 @@ def template_project(id_template):
 
 @app.route('/showcase/link/<int:id_link>/delete')
 def delete_link(id_link):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         if current_user.role in [1, 4]:
             data_session = db_session.create_session()
             link = data_session.query(ShowCaseLink).filter(ShowCaseLink.id == id_link).first()
@@ -161,9 +161,9 @@ def delete_link(id_link):
 
 @app.route('/showcase', methods=['GET', 'POST'])
 def showcase():
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         form = AddLink() if current_user.role in [1, 4] else None
         data_session = db_session.create_session()
         if request.method == 'POST' and current_user.role in [1, 4]:
@@ -188,9 +188,9 @@ def showcase():
 
 @app.route('/project/<int:id_project>/quest/<int:id_task>/edit', methods=['GET', 'POST'])
 def edit_quest(id_project, id_task):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
@@ -227,9 +227,9 @@ def edit_quest(id_project, id_task):
 
 @app.route('/project/<int:id_project>/file/<int:id_file>/delete')
 def delete_file(id_project, id_file):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         from_path = request.args.get('from') if request.args.get('from') else ''
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
@@ -260,9 +260,9 @@ def delete_file(id_project, id_file):
 
 @app.route('/project/<int:id_project>/quest/<int:id_task>', methods=['GET', 'POST'])
 def task_project(id_project, id_task):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
@@ -330,9 +330,9 @@ def task_project(id_project, id_task):
 
 @app.route('/project/<int:id_project>/quest/new', methods=['GET', 'POST'])
 def new_task_project(id_project):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
@@ -363,9 +363,9 @@ def new_task_project(id_project):
 
 @app.route('/project/<int:id_project>/edit', methods=['GET', 'POST'])
 def edit_project(id_project):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
@@ -425,9 +425,9 @@ def edit_project(id_project):
 
 @app.route('/project/<int:id_project>', methods=['POST', 'GET'])
 def project(id_project):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
@@ -510,9 +510,9 @@ def recovery():
 
 @app.route('/project/<int:id_project>/delete', methods=['GET', 'POST'])
 def delete_project(id_project):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         project_del = data_session.query(Projects).filter(Projects.id == id_project).first()
         if project_del:
@@ -537,9 +537,9 @@ def delete_project(id_project):
 
 @app.route('/user/<string:_login>', methods=['GET', 'POST'])
 def user_view(_login):
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         user = data_session.query(User).filter(User.login == _login).first()
         if user:
@@ -560,9 +560,9 @@ def user_view(_login):
 
 @app.route('/projects/new', methods=['GET', 'POST'])
 def new_project():
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         form = ProjectForm()
         data_session = db_session.create_session()
         list_users = list(
@@ -599,9 +599,9 @@ def new_project():
 
 @app.route('/projects', methods=['GET', 'POST'])
 def projects():
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         find = False
         form = FindProjectForm()
         data_session = db_session.create_session()
@@ -629,9 +629,9 @@ def projects():
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    if current_user.banned:
-        return redirect('/logout')
     if current_user.is_authenticated:
+        if current_user.banned:
+            return redirect('/logout')
         data_session = db_session.create_session()
         form = EditProfileForm(
             CombinedMultiDict((request.files, request.form)),

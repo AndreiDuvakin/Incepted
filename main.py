@@ -45,7 +45,6 @@ with open('incepted.config', 'r', encoding='utf-8') as file:
     file = loads(file)
 key = file["encrypt_key"]
 app.config['SECRET_KEY'] = key
-app.debug = True
 logging.basicConfig(level=logging.INFO, filename="logfiles/main.log", format="%(asctime)s %(levelname)s %(message)s",
                     encoding='utf-8')
 csrf = CSRFProtect(app)
@@ -95,7 +94,7 @@ def admin_user(login_usr):
                     user.email = form.email.data
                     data_session.commit()
                     return redirect(f'/admin/user/{str(login_usr)}')
-                return render_template('profile.html', title=user.login, form=form, message='', user=user)
+                return render_template('profile.html', title=user.login, form=form, message='', user=user, admin=True)
             else:
                 abort(403)
     abort(404)
@@ -234,7 +233,8 @@ def edit_quest(id_project, id_task):
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
         if current_project and current_task and current_task.project == current_project.id and (
-                current_task.creator == current_user.id or current_project.creator == current_user.id):
+                current_task.creator == current_user.id or current_project.creator == current_user.id) \
+                or current_user.role == 1:
             form = Task()
             if request.method == 'GET':
                 form.name.data = current_task.name
@@ -276,7 +276,8 @@ def delete_file(id_project, id_file):
         current_file = data_session.query(Files).filter(Files.id == id_file).first()
         if current_project and current_file:
             if current_user.id in map(lambda x: x[0], data_session.query(StaffProjects.user).filter(
-                    StaffProjects.project == current_project.id).all()) or current_user.id == current_project.creator:
+                    StaffProjects.project == current_project.id).all()) or current_user.id == current_project.creator \
+                    or current_user.role == 1:
                 current_proof = data_session.query(FileProof).filter(FileProof.file == id_file).all()
                 os.remove(current_file.path)
                 data_session.delete(current_file)
@@ -306,7 +307,7 @@ def task_project(id_project, id_task):
         data_session = db_session.create_session()
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         current_task = data_session.query(Quests).filter(Quests.id == id_task).first()
-        if current_project and current_task and current_task.project == current_project.id:
+        if current_project and current_task and current_task.project == current_project.id or current_user.role == 1:
             form = AnswerTask()
             current_answer = data_session.query(Answer).filter(Answer.quest == current_task.id).first()
             list_files = None
@@ -410,7 +411,7 @@ def edit_project(id_project):
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
-            if current_user.id == current_project.creator:
+            if current_user.id == current_project.creator or current_user.role == 1:
                 list_users = list(
                     map(lambda x: get_user_data(x),
                         data_session.query(User).filter(User.id != current_user.id, User.activated == 1).all()))
@@ -472,7 +473,8 @@ def project(id_project):
         current_project = data_session.query(Projects).filter(Projects.id == id_project).first()
         if current_project:
             staff = data_session.query(StaffProjects).filter(StaffProjects.project == current_project.id).all()
-            if current_user.id == current_project.creator or current_user.id in list(map(lambda x: x.user, staff)):
+            if current_user.id == current_project.creator or current_user.id in list(
+                    map(lambda x: x.user, staff)) or current_user.role == 1:
                 staff = list(map(lambda x: get_user_data(x), data_session.query(User).filter(
                     User.id.in_(list(map(lambda x: x.user, staff)))).all())) if staff else []
                 quests = data_session.query(Quests).filter(Quests.project == current_project.id).all()
@@ -685,7 +687,7 @@ def profile():
             user = data_session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 return render_template('profile.html', title='Профиль', form=form,
-                                       message='Ошибка, пользователь ненайден', user=current_user)
+                                       message='Ошибка, пользователь ненайден', user=current_user, admin=False)
             os.remove(current_user.photo)
             user.photo = 'static/images/none_logo.png'
             data_session.commit()
@@ -693,7 +695,7 @@ def profile():
             user = data_session.query(User).filter(User.id == current_user.id).first()
             if not user:
                 return render_template('profile.html', title='Профиль', form=form,
-                                       message='Ошибка, пользователь ненайден', user=current_user)
+                                       message='Ошибка, пользователь ненайден', user=current_user, admin=False)
             if form.email.data != current_user.email:
                 token = s.dumps(form.email.data)
                 link_conf = url_for('confirmation', token=token, _external=True)
@@ -711,7 +713,7 @@ def profile():
             user.birthday = form.birthday.data
             data_session.commit()
             return redirect('/profile')
-        return render_template('profile.html', title='Профиль', form=form, message='', user=current_user)
+        return render_template('profile.html', title='Профиль', form=form, message='', user=current_user, admin=False)
     else:
         return redirect('/login')
 

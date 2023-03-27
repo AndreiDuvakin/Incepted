@@ -8,7 +8,7 @@
     </div>
     <div class="project_header">
         <div class="edit_block">
-            {% if current_user.id == project.creator %}
+            {% if current_user.id == project.creator or current_user.role == 1 %}
             <div class="edit_button">
                 <a id="edit_button" class="edit_button_link" href="">
                     <p class="edit_button_text">Редактировать</p>
@@ -110,7 +110,7 @@
                                                 <p class="quest_solve_text">Решить</p>
                                             </a>
                                         </div>
-                                        {% if quest.creator == current_user.id or project.creator == current_user.id %}
+                                        {% if quest.creator == current_user.id or project.creator == current_user.id or current_user.role == 1 %}
                                         <div class="link_edit_block">
                                             <a class="link_edit" href="{{ project.id }}/quest/{{ quest.id }}/edit">
                                                 <p class="link_edit_text">Редактировать</p>
@@ -177,7 +177,7 @@
                     </div>
                     <div class="file_buttons">
                         <div class="btn-group file_buttons_groud">
-                            {% if current_user.id == project.creator or item['object'].user == current_user.id %}
+                            {% if current_user.id == project.creator or item['object'].user == current_user.id or current_user.role == 1%}
                             <a href="../project/{{ project.id }}/file/{{ item['object'].id }}/delete?from=project"
                                class="btn btn-primary file_delete"><p class="button_text">Удалить</p></a>
                             {% endif %}

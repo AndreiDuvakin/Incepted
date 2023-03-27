@@ -77,11 +77,19 @@
                 </div>
                 <div class="form_data_button">
                     {{ form.submit(type="submit", class="profile_button") }}
+                    {% if admin %}
+                    <a class="profile_button" href="/user/{{user.login}}">
+                        <div class="profile_button_text"  id="profile_button_text">
+                            <p>Профиль</p>
+                        </div>
+                    </a>
+                    {% else %}
                     <a class="profile_button" id="logout_button" href="/logout">
                         <div class="profile_button_text">
                             <p>Выйти</p>
                         </div>
                     </a>
+                    {% endif %}
                 </div>
             </form>
         </div>

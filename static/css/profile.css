@@ -92,6 +92,10 @@ form {
     vertical-align: middle;
     font-size: 1.5vw;
 }
+.profile_button:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
 #delete_button {
     margin-top: 45px;
 }
@@ -166,4 +170,7 @@ form {
 }
 .about {
     border-radius: 2vw !important;
+}
+.profile_button_text {
+    color: #ffffff;
 }

@@ -76,6 +76,15 @@
                                 <p class="description_text">{{ project.description }}</p>
                             </div>
                         </div>
+                        {% if current_user.role == 1 %}
+                        <div class="open_project_block">
+                            <div class="open_button">
+                                <a class="open_button_link" href="/project/{{ project.id }}">
+                                    <p class="open_button_text">Открыть</p>
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -3,37 +3,41 @@
 <div class="admin_page">
     <h2 class="admine_title">Изменение данных пользователей</h2>
     <form action="" method="post" class="edit_user_form" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    <div class="admin_block">
-        <div class="users_block">
-            {% for user in users %}
-            <div class="user">
-                <a class="link_to_user" href="/admin/user/{{ user.login }}">
-                    <img class="user_logo" src="{{user.photo}}">
-                    <p class="user_names">{{user.name}}</p>
-                </a>
-                <select name="role_{{ user.id }}" class="form-select role_div" aria-label="Default select example">
-                    {% for role in roles %}
-                    <option class="role" value="{{ loop.index }}" {% if user.role == loop.index %}selected{%
-                            endif %}>{{ roles[loop.index0].name }}
-                    </option>
-                    {% endfor %}
-                </select>
-                {% if user.role != 1 %}
-                <div class="user_active">
-                    <label class="active_label">Активирован</label>
-                    <input class="choose_active" name="active_{{user.id}}" type="checkbox" value="y" {% if user.activated == 1 %}checked="yes"{% endif %}>
+        {{ form.hidden_tag() }}
+        <div class="admin_block">
+            <div class="users_block">
+                {% for user in users %}
+                <div class="user">
+                    <a class="link_to_user" href="/admin/user/{{ user.login }}">
+                        <img class="user_logo" src="{{user.photo}}">
+                        <p class="user_names">{{user.name}}</p>
+                    </a>
+                    <select name="role_{{ user.id }}" class="form-select role_div" aria-label="Default select example">
+                        {% for role in roles %}
+                        <option class="role" value="{{ loop.index }}" {% if user.role== loop.index %}selected{%
+                                endif %}>{{ roles[loop.index0].name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if user.role != 1 %}
+                    <div class="user_active">
+                        <label class="active_label">Активирован</label>
+                        <input class="choose_active" name="active_{{user.id}}" type="checkbox" value="y" {% if
+                               user.activated== 1 %}checked="yes" {% endif %}>
+                    </div>
+                    <div class="user_banned">
+                        <label class="banned_label">Бан</label>
+                        <input class="choose_banned" name="banned_{{user.id}}" type="checkbox" value="y" {% if
+                               user.banned== 1 %}checked="yes" {% endif %}>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="user_banned">
-                    <label class="banned_label">Бан</label>
-                    <input class="choose_banned" name="banned_{{user.id}}" type="checkbox" value="y" {% if user.banned == 1 %}checked="yes"{% endif %}>
-                </div>
-                {% endif %}
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </div>
-    {{ form.submit(type="submit", class="save_button") }}
+        <label>Пасхалка</label>
+        {{egg_form.egg}}
+        {{ form.submit(type="submit", class="save_button") }}
     </form>
 </div>
 {% endblock %}

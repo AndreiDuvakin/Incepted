@@ -1,6 +1,43 @@
 <link rel="stylesheet" href="../static/css/register.css"/>
 {% extends "base.html" %} {% block content %}
 <div class="register_page">
+{% if egg == 1 %}
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" id="btn_cooc" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="staticBackdropLabel">Да, мы собираем сраные куки. Вам не
+                        похуй?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop2">Ну похуй
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="staticBackdropLabel2">Ну вот и не выебывайся</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Заткни ебальник</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="register">
         <h1 class="header_title">Регистрация</h1>
         <div>
@@ -51,4 +88,11 @@
         </div>
     </div>
 </div>
+{% if egg == 1 %}
+<script type="text/javascript">
+    window.onload = function(){
+    document.getElementById('btn_cooc').click();
+}
+</script>
+{% endif %}
 {% endblock %}

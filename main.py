@@ -13,6 +13,7 @@ from sqlalchemy import or_
 from json import loads
 from waitress import serve
 
+from forms.egg import EggForm
 from functions import check_password, mail, init_db_default, get_projects_data, get_user_data, save_project_logo, \
     overdue_quest_project, save_proof_quest, find_files_answer, file_tree, delete_project_data, delete_quest_data, \
     copy_template, save_admin_data
@@ -110,7 +111,14 @@ def admin():
             roles, users = data_session.query(Roles).all(), \
                 data_session.query(User).filter(User.id != current_user.id).all()
             form = EncryptForm()
+            egg_form = EggForm()
             if request.method == 'POST':
+                if egg_form.egg.data:
+                    with open('egg.txt', 'w', encoding='utf-8') as file_egg:
+                        file_egg.write('1')
+                else:
+                    with open('egg.txt', 'w', encoding='utf-8') as file_egg:
+                        file_egg.write('2')
                 data_form = request.form.to_dict()
                 del data_form['csrf_token'], data_form['submit']
                 data_form = list(map(lambda x: (x[0], x[1]), data_form.items()))
@@ -128,7 +136,10 @@ def admin():
                         user.banned = 0
                         user.activated = 1
                 data_session.commit()
-            return render_template('admin.html', title='Панель админа', roles=roles, users=users, form=form)
+            with open('egg.txt', 'r', encoding='utf-8') as file_egg:
+                egg_form.egg.data = True if int(file_egg.read()) == 1 else False
+            return render_template('admin.html', title='Панель админа', roles=roles, users=users,
+                                   form=form, egg_form=egg_form)
     abort(404)
 
 
@@ -771,17 +782,21 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if not current_user.is_authenticated:
+        with open('egg.txt', 'r', encoding='utf-8') as file_egg:
+            egg = int(file_egg.read())
         form = RegisterForm()
         if form.validate_on_submit():
             data_session = db_session.create_session()
             if data_session.query(User).filter(User.login == form.login.data).first():
                 return render_template('register.html', form=form, message="Такой пользователь уже есть",
-                                       title='Регистрация')
+                                       title='Регистрация', egg=0)
             if data_session.query(User).filter(User.email == form.email.data).first():
-                return render_template('register.html', form=form, message="Такая почта уже есть", title='Регистрация')
+                return render_template('register.html', form=form, message="Такая почта уже есть", egg=0,
+                                       title='Регистрация')
             status_password = check_password(form.password.data)
             if status_password != 'OK':
-                return render_template('register.html', form=form, message=status_password, title='Регистрация')
+                return render_template('register.html', form=form, message=status_password, egg=0,
+                                       title='Регистрация')
             user = User(
                 email=form.email.data,
                 name=form.name.data,
@@ -800,7 +815,7 @@ def register():
                  'Подтверждение регистрации')
             logging.info(f'{form.login.data} was registered')
             return redirect('/login?message=Мы выслали ссылку для подтверждения почты')
-        return render_template('register.html', form=form, message='', title='Регистрация')
+        return render_template('register.html', form=form, message='', title='Регистрация', egg=egg)
     else:
         return redirect('/projects')
 

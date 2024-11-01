@@ -1,6 +1,9 @@
 #navbar {
     display: none;
 }
+#btn_cooc {
+    display: none
+}
 .register_page {
     margin-top: -1.1vw;
     display: flex;

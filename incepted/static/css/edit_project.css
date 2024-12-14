@@ -1,0 +1,179 @@
+.edit_project_page {
+    height: 120vw;
+    background-color: #dcb495;
+}
+.form_data, .form_data_button {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2%;
+}
+.form_data_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.input_data {
+    color: #000000;
+    border: 0.1vw solid #595008;
+    height: 4.5vw;
+    min-height: 4.5vw;
+    width: 35vw;
+    background-color: #dbc3af;
+    border-radius: 4.5vw;
+    font-size: 1.3vw;
+    display: inline-flex;
+    align-items: center;
+}
+.input_button {
+    width: 35vw;
+    height: 5vw;
+    border-radius: 5vw;
+    vertical-align: middle;
+}
+.form_label {
+    margin-top: 10px;
+    font-size: 1.3vw;
+    color: #ffffff;
+    font-weight: bold;
+}
+.description {
+    border-radius: 2vw !important;
+    width: 50vw;
+}
+.padding_data {
+    padding-top: 1vw;
+    padding-left: 1vw;
+}
+.label_data {
+    padding-left: 0.8vw;
+    width: 50vw;
+}
+.project_button, .delete_button, .delete_project_link {
+    margin-top: 15px;
+    width: 35vw;
+    height: 5vw;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 5vw;
+    vertical-align: middle;
+    font-size: 1.5vw;
+}
+.collaborator_block {
+    width: 30%;
+    height: 20vw;
+    background-color: #EDCBB0;
+    border-radius: 2vw;
+    overflow-y: auto;
+}
+.user {
+    width: 30vw;
+    height: 3.5vw;
+    background-color: #ffffff;
+    border: 2px solid #9E795A;
+    border-radius: 3vw;
+    margin-top: 5px;
+    display: inline-flex;
+    justify-content: space-between;
+}
+.user_logo {
+    margin-left: 3px;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 5vw;
+    background-color: #000000;
+}
+.user_names {
+    margin-left: 9px;
+    margin-top: 10px;
+    overflow-x: auto;
+}
+.name_form_block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.data_form_block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+.buttons_form_block {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.staff_form_block, .collaborator_block {
+    margin-top: 10px;
+    width: 60%;
+    height: 20vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.staff_block {
+    margin: 5%;
+    width: 90%;
+    height: 20vw;
+}
+.choose_user {
+    align-self: flex-end;
+    margin-bottom: 1.1vw;
+    width: 10%;
+}
+.user_data {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+.delete_project_link {
+    background-color: #ff3f3f;
+}
+.delete_project_link:hover {
+    background-color: #ff3f3f;
+    text-decoration: none;
+    color: #ffffff;
+}
+.delete_project_link_text {
+    width: 35vw;
+    height: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+.link_back_block {
+    margin-right: 0.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.link_back {
+    background-color: #ffffff;
+    color: #000000;
+    width: 15vw;
+    height: 4.5vw;
+    vertical-align: middle;
+    border-radius: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.link_back:hover {
+    text-decoration: none;
+    color: #000000;
+}
+.link_back_text {
+    font-size: 1.5vw;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

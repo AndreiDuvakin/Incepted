@@ -2,7 +2,6 @@
 /venv/
 .idea/
 /.idea
-/incepted/static
-incepted/static/
 /incepted/logfiles/main.log
 /incepted/db/incepted.db
+/incepted/static/app_files/

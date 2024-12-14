@@ -114,10 +114,10 @@ def admin():
             egg_form = EggForm()
             if request.method == 'POST':
                 if egg_form.egg.data:
-                    with open('../egg.txt', 'w', encoding='utf-8') as file_egg:
+                    with open('egg.txt', 'w', encoding='utf-8') as file_egg:
                         file_egg.write('1')
                 else:
-                    with open('../egg.txt', 'w', encoding='utf-8') as file_egg:
+                    with open('egg.txt', 'w', encoding='utf-8') as file_egg:
                         file_egg.write('2')
                 data_form = request.form.to_dict()
                 del data_form['csrf_token'], data_form['submit']
@@ -136,7 +136,7 @@ def admin():
                         user.banned = 0
                         user.activated = 1
                 data_session.commit()
-            with open('../egg.txt', 'r', encoding='utf-8') as file_egg:
+            with open('egg.txt', 'r', encoding='utf-8') as file_egg:
                 egg_form.egg.data = True if int(file_egg.read()) == 1 else False
             return render_template('admin.html', title='Панель админа', roles=roles, users=users,
                                    form=form, egg_form=egg_form)
@@ -782,7 +782,7 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if not current_user.is_authenticated:
-        with open('../egg.txt', 'r', encoding='utf-8') as file_egg:
+        with open('egg.txt', 'r', encoding='utf-8') as file_egg:
             egg = int(file_egg.read())
         form = RegisterForm()
         if form.validate_on_submit():

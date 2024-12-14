@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="../static/css/login.css"/>
+{% extends "base.html" %} {% block content %}
+<div class="login_page">
+    <div class="login">
+        <h1 class="header_title">Авторизация</h1>
+        <div>
+            <form action="" method="post" class="login_form">
+                {{ form.hidden_tag() }}
+                <div class="data_block">
+                    <div class="form_data">
+                        <label class="form-label">{{ form.login.label }}</label>
+                        {{ form.login(class="input_data", type="login", placeholder='example@mail.ex') }} {% for
+                        error in form.login.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="form_data">
+                        <label class="form-label">{{ form.password.label }}</label>
+                        {{ form.password(class="input_data", type="password", placeholder='good_password') }} {%
+                        for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="form_data_button">
+                        {{ form.submit(type="submit", class="input_button login_button") }}
+                        <a class="input_button register_button" type="submit" href="/register">
+                            <div class="register"><strong>Регистрация</strong></div>
+                        </a>
+                        <a class="recovery_button" type="submit" href="/recovery">
+                            <div class="recovery"><strong>Забыли пароль?</strong></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    {{ form.remember_me(class="remember")}} {{form.remember_me.label }}<br/>
+                    {% for error in form.remember_me.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="message_block">
+                    {% if message != '' %}
+                    {% if danger %}
+                    <div class="alert alert-danger message" role="alert">
+                        {{ message }}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success message" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

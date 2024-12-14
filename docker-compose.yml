@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app_moona:
+    build:
+      context: ./incepted
+    volumes:
+      - ./incepted/db:/app/db
+      - ./incepted/static:/app/static
+    environment:
+      - SECRET_KEY=your-secret-key
+    restart: always
+    ports:
+      - "5001:5000"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+        reservations:
+          memory: 128M
+          cpus: "0.2"

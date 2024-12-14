@@ -41,7 +41,7 @@ from data.showcase_link import ShowCaseLink
 from data import db_session
 
 app = Flask(__name__)
-with open('../incepted.config', 'r', encoding='utf-8') as file:
+with open('incepted.config', 'r', encoding='utf-8') as file:
     file = file.read()
     file = loads(file)
 key = file["encrypt_key"]

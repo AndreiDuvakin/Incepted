@@ -1,33 +1,27 @@
-# P.S.
+[🇷🇺 Русский](README_RU.md)
 
-Это первый крупный сайт нашей команды. Мы разрабатывали его для конкурса IT проектов Юн-It Урал.
+# Purpose of creation
+
+We created this website to participate in the IT projects competition "UnIT Ural".
 
 # Incepted
 
-**Incepted** - это сайт, позволяющий вести небольшие проекты, а именно: создавать задачи, выставлять дедлайны, загружать
-файлы и т. д. Сайт расположен по адресу: https://incepted.numerum.site
+**Incepted** is a website that allows you to manage small projects, including creating tasks, setting deadlines, uploading files, and more. The website is located at: https://incepted.numerum.team
 
-## Регистрация
+## Profile
 
-Для регистрации необходимо ввести свою почту, придумать логин, пароль и задать имя, после чего подтвердить почту,
-перейдя по ссылку, которую мы на нее отправим.
+You can change your information in your profile settings: first name, last name, date of birth, profile picture, etc. If you change your email address,
+you will need to confirm it again.
 
-## Профиль
+## Projects
 
-Вы можете изменять свои данные в настройках профиля: имя, фамилию, дату рождения, аватарку и т. д. При изменении почты,
-ее нужно будет снова подтвердить.
+When creating a project, you can give it a name, description, and add participants. You can also change this information in the project settings. Create tasks and set deadlines, upload files, and manage the project.
 
-## Проекты
-
-При создании проекта, вы можете задать ему название, описание и добавить в него участников. Вы также можете изменить эти
-данные в настройках проекта. Создавайте задачи и выставляйте дедлайны, загружайте файлы и управляйте проектом.
-
-# Контакты
+# Contacts
 
 ### Email:
 
-- andrei@duvakin.ru
-- incepted@yandex.ru
+- andreiduvakin@gmail.com
 
 ### VK:
 
@@ -36,3 +30,7 @@
 ### Telegram:
 
 - @andrei_duvakin
+
+## License
+
+MIT. See file [LICENSE](LICENSE).
